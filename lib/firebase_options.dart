@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '744293814908',
     projectId: 'myappmobile-8a3c1',
     storageBucket: 'myappmobile-8a3c1.firebasestorage.app',
-    iosClientId: '744293814908-2hi6uash6eoo8n2t2kqr9em1ceit60s5.apps.googleusercontent.com',
+    iosClientId:
+        '744293814908-2hi6uash6eoo8n2t2kqr9em1ceit60s5.apps.googleusercontent.com',
     iosBundleId: 'com.example.fashionApp',
   );
 
@@ -74,7 +75,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '744293814908',
     projectId: 'myappmobile-8a3c1',
     storageBucket: 'myappmobile-8a3c1.firebasestorage.app',
-    iosClientId: '744293814908-2hi6uash6eoo8n2t2kqr9em1ceit60s5.apps.googleusercontent.com',
+    iosClientId:
+        '744293814908-2hi6uash6eoo8n2t2kqr9em1ceit60s5.apps.googleusercontent.com',
     iosBundleId: 'com.example.fashionApp',
   );
 
