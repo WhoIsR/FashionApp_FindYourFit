@@ -17,7 +17,8 @@ enum AuthStatus {
 
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  bool _isGoogleSignInInitialized = false;
 
   // Kita panggil implementasi repository disini
   final AuthRepository _repository = AuthRepositoryImpl();
@@ -110,14 +111,19 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> loginWithGoogle() async {
     _setLoading();
     try {
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
+      if (!_isGoogleSignInInitialized) {
+        await _googleSignIn.initialize();
+        _isGoogleSignInInitialized = true;
+      }
+
+      final googleUser = await _googleSignIn.authenticate();
+      final googleAuth = googleUser.authentication;
+      if (googleAuth.idToken == null) {
         _setError('Login Google dibatalkan');
         return false;
       }
-      final googleAuth = await googleUser.authentication;
+
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
