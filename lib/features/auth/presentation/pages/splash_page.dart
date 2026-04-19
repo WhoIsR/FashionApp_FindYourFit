@@ -22,11 +22,20 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
-    final token = await SecureStorage.getToken();
+    String? token;
+    try {
+      // Hindari splash menunggu tanpa batas saat secure storage lambat/migrasi
+      token = await SecureStorage.getToken().timeout(
+        const Duration(seconds: 3),
+      );
+    } catch (_) {
+      token = null;
+    }
 
     // Nanti diarahkan ke Dashboard jika token ada.
     // Sementara kita arahkan ke halaman Login dulu.
     final nextRoute = token != null ? AppRouter.login : AppRouter.login;
+    if (!mounted) return;
     Navigator.pushReplacementNamed(context, nextRoute);
   }
 
