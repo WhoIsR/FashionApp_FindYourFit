@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/services/dio_client.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../data/models/auth_response_model.dart';
+import '../models/auth_response_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   @override
