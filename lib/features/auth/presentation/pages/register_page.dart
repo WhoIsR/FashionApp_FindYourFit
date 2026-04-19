@@ -2,7 +2,7 @@ import 'package:fashion_app/core/widgets/auth_header.dart';
 import 'package:fashion_app/core/widgets/custom_button.dart';
 import 'package:fashion_app/core/widgets/custom_text_field.dart';
 import 'package:fashion_app/core/widgets/loading_overlay.dart';
-import 'package:fashion_app/features/auth/presentation/provider/auth_provider.dart';
+import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'verify_email_page.dart';
