@@ -1,3 +1,4 @@
+import 'package:fashion_app/features/auth/presentation/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -10,6 +11,7 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyEmail = '/verify-email';
+  static const String dashboard = 'dashboard';
 
   static Map<String, WidgetBuilder> get routes => {
     splash: (_) => const SplashPage(),
