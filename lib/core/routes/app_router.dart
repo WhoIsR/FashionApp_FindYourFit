@@ -16,5 +16,6 @@ class AppRouter {
     login: (_) => const LoginPage(),
     register: (_) => const RegisterPage(),
     verifyEmail: (_) => const VerifyEmailPage(),
+    dashboard: (_) => AuthGuard(child: const DashboardPage()),
   };
 }
