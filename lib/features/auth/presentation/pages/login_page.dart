@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'register_page.dart';
 import 'verify_email_page.dart';
+import '../../../../core/routes/app_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,14 +33,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _handleLoginResult(bool success, AuthProvider auth) {
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Berhasil! Token aman di brankas.')),
-      );
+      Navigator.pushReplacementNamed(context, AppRouter.dashboard);
     } else if (auth.status == AuthStatus.emailNotVerified) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const VerifyEmailPage()),
-      );
+      Navigator.pushReplacementNamed(context, AppRouter.verifyEmail);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
