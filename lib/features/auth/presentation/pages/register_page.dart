@@ -1,9 +1,11 @@
+import 'package:fashion_app/core/constants/app_colors.dart';
 import 'package:fashion_app/core/widgets/auth_header.dart';
 import 'package:fashion_app/core/widgets/custom_button.dart';
 import 'package:fashion_app/core/widgets/custom_text_field.dart';
 import 'package:fashion_app/core/widgets/loading_overlay.dart';
 import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'verify_email_page.dart';
 import 'login_page.dart';
@@ -66,6 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
+        backgroundColor: AppColors.surface,
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
@@ -120,18 +123,27 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Already have an account? ',
-                        style: TextStyle(color: Colors.grey),
+                        style: GoogleFonts.manrope(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 14,
+                        ),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (_) => const LoginPage()),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Sign In',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.manrope(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondary,
+                            fontSize: 14,
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppColors.secondary.withOpacity(0.3),
+                          ),
                         ),
                       ),
                     ],

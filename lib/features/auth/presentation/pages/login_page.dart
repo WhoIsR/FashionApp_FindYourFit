@@ -1,3 +1,4 @@
+import 'package:fashion_app/core/constants/app_colors.dart';
 import 'package:fashion_app/core/widgets/auth_header.dart';
 import 'package:fashion_app/core/widgets/custom_button.dart';
 import 'package:fashion_app/core/widgets/custom_text_field.dart';
@@ -5,6 +6,7 @@ import 'package:fashion_app/core/widgets/divider_with_text.dart';
 import 'package:fashion_app/core/widgets/google_sign_in_button.dart';
 import 'package:fashion_app/core/widgets/loading_overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'register_page.dart';
@@ -69,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
     return LoadingOverlay(
       isLoading: isLoading,
       child: Scaffold(
+        backgroundColor: AppColors.surface,
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
@@ -123,9 +126,12 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'New to FindYourFit? ',
-                        style: TextStyle(color: Colors.grey),
+                        style: GoogleFonts.manrope(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 14,
+                        ),
                       ),
                       GestureDetector(
                         onTap: () => Navigator.pushReplacement(
@@ -134,9 +140,15 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (_) => const RegisterPage(),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Create an account',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.manrope(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.secondary,
+                            fontSize: 14,
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppColors.secondary.withOpacity(0.3),
+                          ),
                         ),
                       ),
                     ],

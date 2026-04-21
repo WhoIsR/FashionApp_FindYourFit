@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../core/services/secure_storage.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -71,8 +72,7 @@ class _SplashPageState extends State<SplashPage> {
                   // --- Teks Bagian Atas ---
                   Text(
                     'COLLECTION Nº 01',
-                    style: TextStyle(
-                      fontFamily: 'Manrope',
+                    style: GoogleFonts.manrope(
                       fontSize: 10,
                       letterSpacing: 5.0,
                       color: AppColors.surface.withOpacity(
@@ -85,10 +85,9 @@ class _SplashPageState extends State<SplashPage> {
                   // --- Teks Bagian Tengah ---
                   Column(
                     children: [
-                      const Text(
+                      Text(
                         'FindYourFit',
-                        style: TextStyle(
-                          fontFamily: 'Noto Serif',
+                        style: GoogleFonts.notoSerif(
                           fontSize: 56,
                           fontWeight: FontWeight.w300,
                           letterSpacing: -1.5,
@@ -115,8 +114,7 @@ class _SplashPageState extends State<SplashPage> {
                     children: [
                       Text(
                         'STYLE DE TENUE',
-                        style: TextStyle(
-                          fontFamily: 'Manrope',
+                        style: GoogleFonts.manrope(
                           fontSize: 11,
                           letterSpacing: 4.0,
                           color: AppColors.surface.withOpacity(0.8),
@@ -125,8 +123,7 @@ class _SplashPageState extends State<SplashPage> {
                       const SizedBox(height: 16),
                       Text(
                         '© 2026 Radja Satrio Seftiano',
-                        style: TextStyle(
-                          fontFamily: 'Manrope',
+                        style: GoogleFonts.manrope(
                           fontSize: 9,
                           letterSpacing: 2.0,
                           color: AppColors.surface.withOpacity(0.5),
@@ -135,8 +132,7 @@ class _SplashPageState extends State<SplashPage> {
                       const SizedBox(height: 4),
                       Text(
                         "l'art de s'habiller",
-                        style: TextStyle(
-                          fontFamily: 'Noto Serif',
+                        style: GoogleFonts.notoSerif(
                           fontSize: 10,
                           fontStyle: FontStyle.italic,
                           letterSpacing: 1.5,
