@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
 enum ButtonVariant { primary, exclusive, outline, text }
@@ -36,8 +37,7 @@ class CustomButton extends StatelessWidget {
               if (icon != null) ...[icon!, const SizedBox(width: 12)],
               Text(
                 label.toUpperCase(),
-                style: const TextStyle(
-                  fontFamily: 'Manrope',
+                style: GoogleFonts.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2.0, // Tracking widets

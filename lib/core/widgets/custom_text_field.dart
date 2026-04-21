@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -26,8 +27,7 @@ class CustomTextField extends StatelessWidget {
       children: [
         Text(
           label.toUpperCase(),
-          style: const TextStyle(
-            fontFamily: 'Manrope',
+          style: GoogleFonts.manrope(
             fontSize: 10,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.5,
@@ -38,8 +38,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           obscureText: obscureText,
           validator: validator,
-          style: const TextStyle(
-            fontFamily: 'Manrope',
+          style: GoogleFonts.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w300,
             color: AppColors.onSurface,

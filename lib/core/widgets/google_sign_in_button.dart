@@ -1,5 +1,6 @@
 import 'package:fashion_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -33,10 +34,9 @@ class GoogleSignInButton extends StatelessWidget {
                 children: [
                   Image.asset('assets/icons/google_logo.png', height: 20),
                   const SizedBox(width: 12),
-                  const Text(
+                  Text(
                     'CONTINUE WITH GOOGLE',
-                    style: TextStyle(
-                      fontFamily: 'Manrope',
+                    style: GoogleFonts.manrope(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.5,

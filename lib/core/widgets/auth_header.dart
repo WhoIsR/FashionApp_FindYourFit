@@ -1,5 +1,6 @@
 import 'package:fashion_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthHeader extends StatelessWidget {
   final String title;
@@ -13,22 +14,31 @@ class AuthHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title.toUpperCase(),
-          style: const TextStyle(
-            fontFamily: 'Noto Serif',
-            fontSize: 32,
+          'AUTHENTICATION',
+          style: GoogleFonts.manrope(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 3.0,
+            color: AppColors.secondary,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          title,
+          style: GoogleFonts.notoSerif(
+            fontSize: 36,
             fontWeight: FontWeight.bold,
             letterSpacing: -1.0,
             color: AppColors.onSurface,
+            height: 1.1,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         Text(
           subtitle,
-          style: const TextStyle(
-            fontFamily: 'Manrope',
+          style: GoogleFonts.manrope(
             fontSize: 14,
-            height: 1.6,
+            fontWeight: FontWeight.w300,
             color: AppColors.onSurfaceVariant,
           ),
         ),
@@ -36,3 +46,4 @@ class AuthHeader extends StatelessWidget {
     );
   }
 }
+
