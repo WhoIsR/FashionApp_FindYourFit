@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fashion_app/core/widgets/auth_header.dart';
-import 'package:fashion_app/core/widgets/custom_button.dart';
-import 'login_page.dart';
+
+import '../../../../core/widgets/auth_header.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/routes/app_router.dart';
+import '../providers/auth_provider.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({super.key});
@@ -29,25 +31,29 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   }
 
   void _startPolling() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) async {
+    // Mengecek ke Firebase setiap 3 detik
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) async {
       if (!mounted) return;
+
+      // 1. Panggil Otak aplikasi (AuthProvider)
       final auth = context.read<AuthProvider>();
+
+      // 2. Suruh dia ngecek ke Firebase DAN ngabarin Satpam (AuthGuard)
       final success = await auth.checkEmailVerified();
 
+      // 3. Kalau udah sukses dan Satpam udah dikabarin
       if (success && mounted) {
-        _timer?.cancel();
-        // Kalau udah lolos, sementara arahin balik ke login dulu sebelum ada dashboard
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-        );
+        _timer?.cancel(); // Matiin timernya
+
+        // Langsung gas masuk ke etalase fashion lu!
+        Navigator.pushReplacementNamed(context, AppRouter.dashboard);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AuthProvider>().firebaseUser;
+    final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       body: SafeArea(
@@ -82,10 +88,8 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                 variant: ButtonVariant.text,
                 onPressed: () {
                   context.read<AuthProvider>().logout();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
-                  );
+                  // Ini juga diganti pakai sistem routing buku peta kita
+                  Navigator.pushReplacementNamed(context, AppRouter.login);
                 },
               ),
             ],
