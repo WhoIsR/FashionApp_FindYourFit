@@ -20,7 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
     'All Pieces',
     'Outerwear',
     'Knitwear',
-    'Accessories'
+    'Accessories',
   ];
 
   @override
@@ -45,7 +45,7 @@ class _DashboardPageState extends State<DashboardPage> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: AppBar(
-              backgroundColor: AppColors.surface.withOpacity(0.8),
+              backgroundColor: AppColors.surface.withOpacity(0.75),
               elevation: 0,
               centerTitle: true,
               leading: IconButton(
@@ -63,8 +63,10 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.shopping_bag_outlined,
-                      color: AppColors.onSurface),
+                  icon: const Icon(
+                    Icons.shopping_bag_outlined,
+                    color: AppColors.onSurface,
+                  ),
                   onPressed: () {},
                 ),
                 const SizedBox(width: 8),
@@ -83,81 +85,96 @@ class _DashboardPageState extends State<DashboardPage> {
               child: SizedBox(
                 height: 618,
                 width: double.infinity,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.network(
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuCuuMf_mQdQQB-EMqobAclE5vTPPNXrL3AR0RT6c_muOWvkdofaO2SkynxUmeIm3q3G-K4U_9Paf5WkvPJwpqN1yVfh_nHSrPTEil4RNcmZ9sg19EVC4spO-z_iIhyWmkOoXCvXQPXCciFBdqcSc3Qp5ggldSPDtlMh_fnd0TsQP9e7z0k44uSGXvN3zFcjFVEW1QYPH8fUcCqwcBa5nb0L7XA8LU48htM8JjeAMfa-6ySfCO7Y-3wMJEPXBVcyjHj1mjtEeNmbl1A3',
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          Container(color: AppColors.surfaceContainerHigh),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [
-                            AppColors.onSurface.withOpacity(0.4),
-                            Colors.transparent,
-                          ],
+                child: ClipRect(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Container(
+                        color: AppColors.surfaceContainer,
+                      ), // Latar belakang abu-abu agar blur App Bar terlihat pekat di bagian atas
+                      Positioned(
+                        top:
+                            120, // Memaksa posisi gambar 90px ke bawah agar kepala 100% aman
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Image.network(
+                          'https://lh3.googleusercontent.com/aida-public/AB6AXuCuuMf_mQdQQB-EMqobAclE5vTPPNXrL3AR0RT6c_muOWvkdofaO2SkynxUmeIm3q3G-K4U_9Paf5WkvPJwpqN1yVfh_nHSrPTEil4RNcmZ9sg19EVC4spO-z_iIhyWmkOoXCvXQPXCciFBdqcSc3Qp5ggldSPDtlMh_fnd0TsQP9e7z0k44uSGXvN3zFcjFVEW1QYPH8fUcCqwcBa5nb0L7XA8LU48htM8JjeAMfa-6ySfCO7Y-3wMJEPXBVcyjHj1mjtEeNmbl1A3',
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          errorBuilder: (_, __, ___) =>
+                              Container(color: AppColors.surfaceContainerHigh),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 32,
-                      left: 32,
-                      right: 32,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'SUMMER 2024',
-                            style: GoogleFonts.manrope(
-                              color: AppColors.surface,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 3.0,
-                            ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              AppColors.onSurface.withOpacity(0.4),
+                              Colors.transparent,
+                            ],
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'NEW COLLECTION',
-                            style: GoogleFonts.notoSerif(
-                              color: AppColors.surface,
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              height: 1.0,
-                              letterSpacing: -1.5,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 32,
+                        left: 32,
+                        right: 32,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'SUMMER 2026',
+                              style: GoogleFonts.manrope(
+                                color: AppColors.surface,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 3.0,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 24),
-                          Container(
-                            color: AppColors.surface,
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 32, vertical: 16),
-                                  child: Text(
-                                    'EXPLORE NOW',
-                                    style: GoogleFonts.manrope(
-                                      color: AppColors.onSurface,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 2.0,
+                            const SizedBox(height: 8),
+                            Text(
+                              'NEW COLLECTION',
+                              style: GoogleFonts.notoSerif(
+                                color: AppColors.surface,
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                                height: 1.0,
+                                letterSpacing: -1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            Container(
+                              color: AppColors.surface,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 16,
+                                    ),
+                                    child: Text(
+                                      'EXPLORE NOW',
+                                      style: GoogleFonts.manrope(
+                                        color: AppColors.onSurface,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 2.0,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -207,7 +224,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
 
-            // 3. Product Grid (Asymmetric)
+            // 3. Product Grid (Asymmetric & Horizontal)
             if (productState.status == ProductStatus.loading ||
                 productState.status == ProductStatus.initial)
               const SliverFillRemaining(
@@ -221,13 +238,17 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline,
-                          size: 48, color: AppColors.onSurfaceVariant),
+                      const Icon(
+                        Icons.error_outline,
+                        size: 48,
+                        color: AppColors.onSurfaceVariant,
+                      ),
                       const SizedBox(height: 16),
                       Text(
                         productState.error ?? 'Gagal memuat koleksi terbaru.',
                         style: GoogleFonts.manrope(
-                            color: AppColors.onSurfaceVariant),
+                          color: AppColors.onSurfaceVariant,
+                        ),
                       ),
                       const SizedBox(height: 24),
                       OutlinedButton(
@@ -236,12 +257,16 @@ class _DashboardPageState extends State<DashboardPage> {
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.onSurface,
                           side: const BorderSide(
-                              color: AppColors.outlineVariant),
+                            color: AppColors.outlineVariant,
+                          ),
                           shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero),
+                            borderRadius: BorderRadius.zero,
+                          ),
                         ),
-                        child: const Text('COBA LAGI',
-                            style: TextStyle(letterSpacing: 1.5)),
+                        child: const Text(
+                          'COBA LAGI',
+                          style: TextStyle(letterSpacing: 1.5),
+                        ),
                       ),
                     ],
                   ),
@@ -250,154 +275,67 @@ class _DashboardPageState extends State<DashboardPage> {
             else if (productState.products.isEmpty)
               SliverFillRemaining(
                 child: Center(
-                  child: Text('Koleksi kosong.',
-                      style: GoogleFonts.manrope(
-                          color: AppColors.onSurfaceVariant)),
+                  child: Text(
+                    'Koleksi kosong.',
+                    style: GoogleFonts.manrope(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
                 ),
               )
             else
               SliverPadding(
-                padding:
-                    const EdgeInsets.only(left: 24, right: 24, top: 48, bottom: 120),
+                padding: const EdgeInsets.only(top: 48, bottom: 120),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final products = productState.products;
+                  delegate: SliverChildListDelegate([
+                    // Item 1: Full Width Large Product
+                    if (productState.products.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 64,
+                        ),
+                        child: ProductCard(
+                          name: productState.products[0].name,
+                          price: productState.products[0].price,
+                          imageUrl: productState.products[0].imageUrl,
+                          category: productState.products[0].category,
+                          isLarge: true,
+                        ),
+                      ),
 
-                      // Full Width Item (Index 0)
-                      if (index == 0) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 64),
-                          child: ProductCard(
-                            name: products[0].name,
-                            price: products[0].price,
-                            imageUrl: products[0].imageUrl,
-                            category: products[0].category,
-                            isLarge: true,
-                          ),
-                        );
-                      }
-
-                      // Member Exclusive Banner (setelah item 3 kalau ada)
-                      if (index == 2 && products.length > 3) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 64),
-                          child: Container(
-                            width: double.infinity,
-                            color: AppColors.surfaceContainerHigh,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 48, horizontal: 32),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'MEMBER EXCLUSIVE',
-                                  style: GoogleFonts.notoSerif(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: -1.0,
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'Gain early access to our seasonal archives and atelier private sales.',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.manrope(
-                                    fontSize: 14,
-                                    color: AppColors.onSurfaceVariant,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                const SizedBox(height: 32),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        AppColors.secondary,
-                                        AppColors.secondaryDim
-                                      ],
-                                    ),
-                                  ),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {},
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 48, vertical: 16),
-                                        child: Text(
-                                          'JOIN THE ATELIER',
-                                          style: GoogleFonts.manrope(
-                                            color: AppColors.surface,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 2.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-
-                      // 2-Column Grid Item pairs
-                      // Susun indeks berikutnya menjadi pasangan 2 kolom
-                      // Karena kita pakai SliverList untuk custom asymmetric layout
-                      // Logic: index 1 -> pair(1,2), index 3 -> pair(3,4), dst.
-                      // Tapi karena kita sudah pakai index 2 untuk banner, kita perlu map sisa index.
-                      
-                      // Untuk memudahkan, kita render baris berisi 2 item.
-                      // Index SliverList: 
-                      // 0: Item 0
-                      // 1: Row (Item 1, Item 2)
-                      // 2: Banner
-                      // 3: Row (Item 3, Item 4)
-                      // 4: Row (Item 5, Item 6)
-                      
-                      int p1Index = 0;
-                      int p2Index = -1;
-                      
-                      if (index == 1) {
-                         p1Index = 1;
-                         p2Index = 2;
-                      } else if (index > 2) {
-                         // index 3 -> 3, 4
-                         // index 4 -> 5, 6
-                         int baseOffset = 3 + ((index - 3) * 2);
-                         p1Index = baseOffset;
-                         p2Index = baseOffset + 1;
-                      } else {
-                         return const SizedBox(); // Fallback untuk index banner (sudah dihandle di atas)
-                      }
-                      
-                      if (p1Index >= products.length) return const SizedBox();
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 64),
+                    // Item 2 & 3: Asymmetric Row
+                    if (productState.products.length > 1)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 64,
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: ProductCard(
-                                name: products[p1Index].name,
-                                price: products[p1Index].price,
-                                imageUrl: products[p1Index].imageUrl,
-                                category: products[p1Index].category,
+                                name: productState.products[1].name,
+                                price: productState.products[1].price,
+                                imageUrl: productState.products[1].imageUrl,
+                                category: productState.products[1].category,
                               ),
                             ),
                             const SizedBox(width: 16),
-                            if (p2Index < products.length)
+                            if (productState.products.length > 2)
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 48), // Offset Asymmetric
+                                  padding: const EdgeInsets.only(
+                                    top: 48,
+                                  ), // Asymmetric offset
                                   child: ProductCard(
-                                    name: products[p2Index].name,
-                                    price: products[p2Index].price,
-                                    imageUrl: products[p2Index].imageUrl,
-                                    category: products[p2Index].category,
+                                    name: productState.products[2].name,
+                                    price: productState.products[2].price,
+                                    imageUrl: productState.products[2].imageUrl,
+                                    category: productState.products[2].category,
                                   ),
                                 ),
                               )
@@ -405,18 +343,107 @@ class _DashboardPageState extends State<DashboardPage> {
                               const Expanded(child: SizedBox()),
                           ],
                         ),
-                      );
-                    },
-                    // Hitung childCount: 
-                    // 1 (full width) + 1 (banner) + ceil((len-1)/2)
-                    childCount: productState.products.isEmpty 
-                      ? 0 
-                      : (productState.products.length <= 1 
-                          ? 1 
-                          : (productState.products.length <= 3 
-                              ? 2 
-                              : 3 + ((productState.products.length - 3) / 2).ceil())),
-                  ),
+                      ),
+
+                    // Member Exclusive Banner
+                    if (productState.products.length > 3)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          bottom: 64,
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          color: AppColors.surfaceContainerHigh,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 48,
+                            horizontal: 32,
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'MEMBER EXCLUSIVE',
+                                style: GoogleFonts.notoSerif(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: -1.0,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Gain early access to our seasonal archives and atelier private sales.',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.manrope(
+                                  fontSize: 14,
+                                  color: AppColors.onSurfaceVariant,
+                                  height: 1.5,
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              Container(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppColors.secondary,
+                                      AppColors.secondaryDim,
+                                    ],
+                                  ),
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 48,
+                                        vertical: 16,
+                                      ),
+                                      child: Text(
+                                        'JOIN THE ATELIER',
+                                        style: GoogleFonts.manrope(
+                                          color: AppColors.surface,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                    // Remaining Products in Horizontal Scroll
+                    if (productState.products.isNotEmpty)
+                      SizedBox(
+                        height: 380, // Approximate height to fit ProductCard
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          itemCount:
+                              10, // Menampilkan 10 item biar bisa digeser (duplikasi simulasi)
+                          itemBuilder: (context, index) {
+                            final p = productState
+                                .products[index % productState.products.length];
+                            return Container(
+                              width:
+                                  180, // Fixed width so they are neatly aligned side by side
+                              margin: const EdgeInsets.only(right: 16),
+                              child: ProductCard(
+                                name: p.name,
+                                price: p.price,
+                                imageUrl: p.imageUrl,
+                                category: p.category,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                  ]),
                 ),
               ),
           ],
@@ -427,7 +454,7 @@ class _DashboardPageState extends State<DashboardPage> {
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             height: 90,
-            color: AppColors.surface.withOpacity(0.85),
+            color: AppColors.surface.withOpacity(0.75),
             padding: const EdgeInsets.only(bottom: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -449,8 +476,15 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isActive, VoidCallback onTap) {
-    final color = isActive ? AppColors.secondary : AppColors.onSurface.withOpacity(0.6);
+  Widget _buildNavItem(
+    IconData icon,
+    String label,
+    bool isActive,
+    VoidCallback onTap,
+  ) {
+    final color = isActive
+        ? AppColors.secondary
+        : AppColors.onSurface.withOpacity(0.6);
     return GestureDetector(
       onTap: onTap,
       child: Column(
