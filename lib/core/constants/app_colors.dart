@@ -13,4 +13,7 @@ class AppColors {
     0xFFEDEEEA,
   ); // Abu-abu muda buat blok
   static const Color outlineVariant = Color(0xFFAFB3AE); // Ghost border
+  static const Color inverseSurface = Color(
+    0xFF0D0F0D,
+  ); // Background gelap buat splash dan gradasi
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/services/secure_storage.dart';
 import '../../../../core/routes/app_router.dart';
+import '../../../../core/services/secure_storage.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -18,56 +18,138 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _checkAuthStatus() async {
-    // Tahan layar selama 2 detik untuk menampilkan logo
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 4));
     if (!mounted) return;
 
-    String? token;
-    try {
-      // Hindari splash menunggu tanpa batas saat secure storage lambat/migrasi
-      token = await SecureStorage.getToken().timeout(
-        const Duration(seconds: 3),
-      );
-    } catch (_) {
-      token = null;
-    }
+    final token = await SecureStorage.getToken();
 
-    // Nanti diarahkan ke Dashboard jika token ada.
-    // Sementara kita arahkan ke halaman Login dulu.
-    final nextRoute = token != null ? AppRouter.login : AppRouter.login;
-    if (!mounted) return;
+    final nextRoute = token != null ? AppRouter.dashboard : AppRouter.login;
     Navigator.pushReplacementNamed(context, nextRoute);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.surface,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'FINDYOURFIT',
-              style: TextStyle(
-                fontFamily: 'Noto Serif',
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                letterSpacing: -1.5,
-                color: AppColors.onSurface,
+      backgroundColor: AppColors.inverseSurface,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // 1. Foto Latar Belakang
+          Image.asset(
+            'assets/images/model_splash.jpg',
+            fit: BoxFit.cover,
+            cacheHeight: 1200,
+          ),
+
+          // 2. Gradasi gelap agar tulisan tetap terbaca jelas di atas foto
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  AppColors.inverseSurface.withOpacity(0.9),
+                  AppColors.inverseSurface.withOpacity(0.3),
+                  AppColors.inverseSurface.withOpacity(0.1),
+                  AppColors.inverseSurface.withOpacity(0.6),
+                ],
+                stops: const [0.0, 0.4, 0.6, 1.0],
               ),
             ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: 100,
-              child: LinearProgressIndicator(
-                backgroundColor: AppColors.outlineVariant.withOpacity(0.2),
-                color: AppColors.onSurface,
-                minHeight: 2,
+          ),
+
+          // 3. Konten Teks
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 40.0,
+                horizontal: 24.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // --- Teks Bagian Atas ---
+                  Text(
+                    'COLLECTION Nº 01',
+                    style: TextStyle(
+                      fontFamily: 'Manrope',
+                      fontSize: 10,
+                      letterSpacing: 5.0,
+                      color: AppColors.surface.withOpacity(
+                        0.7,
+                      ), // Menggunakan warna tema
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  // --- Teks Bagian Tengah ---
+                  Column(
+                    children: [
+                      const Text(
+                        'FindYourFit',
+                        style: TextStyle(
+                          fontFamily: 'Noto Serif',
+                          fontSize: 56,
+                          fontWeight: FontWeight.w300,
+                          letterSpacing: -1.5,
+                          color: AppColors.surface, // Menggunakan warna tema
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      // Garis tipis sebagai pemanis visual
+                      SizedBox(
+                        width: 80,
+                        height: 1,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AppColors.surface.withOpacity(0.2),
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            AppColors.surface,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // --- Teks Bagian Bawah ---
+                  Column(
+                    children: [
+                      Text(
+                        'STYLE DE TENUE',
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontSize: 11,
+                          letterSpacing: 4.0,
+                          color: AppColors.surface.withOpacity(0.8),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        '© 2026 Radja Satrio Seftiano',
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontSize: 9,
+                          letterSpacing: 2.0,
+                          color: AppColors.surface.withOpacity(0.5),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "l'art de s'habiller",
+                        style: TextStyle(
+                          fontFamily: 'Noto Serif',
+                          fontSize: 10,
+                          fontStyle: FontStyle.italic,
+                          letterSpacing: 1.5,
+                          color: AppColors.surface.withOpacity(0.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
