@@ -7,6 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../providers/product_provider.dart';
 import 'package:fashion_app/features/auth/presentation/pages/profile_page.dart';
 import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:fashion_app/features/cart/presentation/pages/cart_page.dart';
 import '../../data/models/product_model.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -77,12 +78,46 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.shopping_bag_outlined,
-                    color: AppColors.onSurface,
-                  ),
-                  onPressed: () {},
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.shopping_bag_outlined,
+                        color: AppColors.onSurface,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const CartPage()),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Consumer<CartProvider>(
+                        builder: (context, cart, child) {
+                          if (cart.totalItems == 0) return const SizedBox();
+                          return Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: AppColors.secondary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              '${cart.totalItems}',
+                              style: const TextStyle(
+                                color: AppColors.surface,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(width: 8),
               ],
@@ -480,7 +515,12 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 _buildNavItem(Icons.auto_awesome, 'Discover', true, () {}),
                 _buildNavItem(Icons.search, 'Search', false, () {}),
-                _buildNavItem(Icons.shopping_bag_outlined, 'Bag', false, () {}),
+                _buildNavItem(Icons.shopping_bag_outlined, 'Bag', false, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CartPage()),
+                  );
+                }),
                 _buildNavItem(Icons.person_outline, 'Profile', false, () {
                   Navigator.push(
                     context,
