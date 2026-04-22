@@ -42,36 +42,29 @@ class ProductCard extends StatelessWidget {
           ),
           SizedBox(height: isLarge ? 16 : 12),
           if (isLarge)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name.toUpperCase(),
-                        style: GoogleFonts.notoSerif(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
-                          color: AppColors.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        category.toUpperCase(),
-                        style: GoogleFonts.manrope(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 2.0,
-                          color: AppColors.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+                Text(
+                  name.toUpperCase(),
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
+                    color: AppColors.onSurface,
                   ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  category.toUpperCase(),
+                  style: GoogleFonts.manrope(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 2.0,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 12),
                 Text(
                   'Rp ${price.toStringAsFixed(0)}',
                   style: GoogleFonts.notoSerif(

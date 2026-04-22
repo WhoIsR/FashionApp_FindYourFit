@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../providers/product_provider.dart';
-import 'profile_page.dart';
+import 'package:fashion_app/features/auth/presentation/pages/profile_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});

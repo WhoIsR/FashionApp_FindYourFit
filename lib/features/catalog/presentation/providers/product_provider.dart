@@ -1,4 +1,4 @@
-import 'package:fashion_app/features/auth/data/repositories/prodcut_repository_impl.dart';
+import 'package:fashion_app/features/catalog/data/repositories/product_repository_impl.dart';
 import 'package:flutter/material.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../../data/models/product_model.dart';
