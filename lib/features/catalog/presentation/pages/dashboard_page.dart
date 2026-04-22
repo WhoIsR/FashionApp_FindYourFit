@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../providers/product_provider.dart';
 import 'package:fashion_app/features/auth/presentation/pages/profile_page.dart';
+import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
+import '../../data/models/product_model.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -29,6 +31,19 @@ class _DashboardPageState extends State<DashboardPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductProvider>().fetchProducts();
     });
+  }
+
+  void _addToCart(BuildContext context, ProductModel product) {
+    context.read<CartProvider>().addToCart(product);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${product.name.toUpperCase()} added to bag', 
+          style: GoogleFonts.manrope(color: AppColors.surface, fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.onSurface,
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -302,6 +317,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           imageUrl: productState.products[0].imageUrl,
                           category: productState.products[0].category,
                           isLarge: true,
+                          onAddToCart: () => _addToCart(context, productState.products[0]),
                         ),
                       ),
 
@@ -322,6 +338,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 price: productState.products[1].price,
                                 imageUrl: productState.products[1].imageUrl,
                                 category: productState.products[1].category,
+                                onAddToCart: () => _addToCart(context, productState.products[1]),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -336,6 +353,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     price: productState.products[2].price,
                                     imageUrl: productState.products[2].imageUrl,
                                     category: productState.products[2].category,
+                                    onAddToCart: () => _addToCart(context, productState.products[2]),
                                   ),
                                 ),
                               )
@@ -438,6 +456,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 price: p.price,
                                 imageUrl: p.imageUrl,
                                 category: p.category,
+                                onAddToCart: () => _addToCart(context, p),
                               ),
                             );
                           },

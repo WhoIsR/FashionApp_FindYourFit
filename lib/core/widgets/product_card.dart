@@ -8,6 +8,7 @@ class ProductCard extends StatelessWidget {
   final String imageUrl;
   final String category;
   final VoidCallback? onTap;
+  final VoidCallback? onAddToCart;
   final bool isLarge;
 
   const ProductCard({
@@ -17,6 +18,7 @@ class ProductCard extends StatelessWidget {
     required this.imageUrl,
     required this.category,
     this.onTap,
+    this.onAddToCart,
     this.isLarge = false,
   });
 
@@ -65,13 +67,23 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  'Rp ${price.toStringAsFixed(0)}',
-                  style: GoogleFonts.notoSerif(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.secondary,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Rp ${price.toStringAsFixed(0)}',
+                      style: GoogleFonts.notoSerif(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.secondary,
+                      ),
+                    ),
+                    if (onAddToCart != null)
+                      IconButton(
+                        onPressed: onAddToCart,
+                        icon: const Icon(Icons.add_shopping_cart, color: AppColors.onSurface),
+                      ),
+                  ],
                 ),
               ],
             )
@@ -98,13 +110,31 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Rp ${price.toStringAsFixed(0)}',
-              style: GoogleFonts.notoSerif(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: AppColors.secondary,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Rp ${price.toStringAsFixed(0)}',
+                  style: GoogleFonts.notoSerif(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.secondary,
+                  ),
+                ),
+                if (onAddToCart != null)
+                  InkWell(
+                    onTap: onAddToCart,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: AppColors.secondary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.add, size: 16, color: AppColors.surface),
+                    ),
+                  ),
+              ],
             ),
           ],
         ],
