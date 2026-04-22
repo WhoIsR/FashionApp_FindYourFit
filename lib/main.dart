@@ -2,6 +2,7 @@ import 'package:fashion_app/core/routes/app_router.dart';
 import 'package:fashion_app/core/theme/app_theme.dart';
 import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:fashion_app/features/catalog/presentation/providers/product_provider.dart';
+import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => ProductProvider(),
         ), // <-- Tambahin ini
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: const MyApp(),
     ),
