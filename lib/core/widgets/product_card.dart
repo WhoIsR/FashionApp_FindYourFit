@@ -125,13 +125,9 @@ class ProductCard extends StatelessWidget {
                   InkWell(
                     onTap: onAddToCart,
                     borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: AppColors.secondary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.add_shopping_cart, size: 16, color: AppColors.surface),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Icon(Icons.add_shopping_cart, size: 18, color: AppColors.onSurfaceVariant),
                     ),
                   ),
               ],
