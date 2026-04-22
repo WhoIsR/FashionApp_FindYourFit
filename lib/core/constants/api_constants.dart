@@ -9,6 +9,9 @@ class ApiConstants {
   // Product endpoints
   static const String products = '/products';
 
+  // Checkout endpoint
+  static const String checkout = '/checkout';
+
   // Timeout (Batas waktu nunggu loading, 15 detik)
   static const int connectTimeout = 15000;
   static const int receiveTimeout = 15000;

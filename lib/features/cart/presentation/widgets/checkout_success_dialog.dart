@@ -1,8 +1,6 @@
 import 'package:fashion_app/core/constants/app_colors.dart';
-import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class CheckoutSuccessDialog extends StatelessWidget {
   const CheckoutSuccessDialog({super.key});
@@ -56,9 +54,6 @@ class CheckoutSuccessDialog extends StatelessWidget {
               height: 56,
               child: OutlinedButton(
                 onPressed: () {
-                  // Bersihkan keranjang belanja
-                  context.read<CartProvider>().clearCart();
-                  
                   // Tutup dialog
                   Navigator.pop(context);
                   

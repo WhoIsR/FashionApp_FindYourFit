@@ -209,27 +209,52 @@ class CartPage extends StatelessWidget {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) => const CheckoutSuccessDialog(),
-                            );
-                          },
+                          onPressed: cartState.isCheckingOut
+                              ? null
+                              : () async {
+                                  final success = await context.read<CartProvider>().checkout();
+                                  if (success && context.mounted) {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (_) => const CheckoutSuccessDialog(),
+                                    );
+                                  } else if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          context.read<CartProvider>().checkoutError ?? 'Checkout gagal',
+                                          style: GoogleFonts.manrope(color: AppColors.surface),
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  }
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.onSurface,
                             foregroundColor: AppColors.surface,
                             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                             elevation: 0,
                           ),
-                          child: Text(
-                            'CHECKOUT',
-                            style: GoogleFonts.manrope(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 2.0,
-                            ),
-                          ),
+                          child: cartState.isCheckingOut
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.surface,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'CHECKOUT',
+                                  style: GoogleFonts.manrope(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 2.0,
+                                  ),
+                                ),
                         ),
                       ),
                     ],

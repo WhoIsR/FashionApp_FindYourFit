@@ -1,11 +1,20 @@
 import 'package:fashion_app/features/catalog/data/models/product_model.dart';
 import 'package:flutter/material.dart';
+import '../../data/repositories/checkout_repository_impl.dart';
 import '../../domain/models/cart_item.dart';
+import '../../domain/repositories/checkout_repository.dart';
 
 class CartProvider extends ChangeNotifier {
   final List<CartItem> _items = [];
+  final CheckoutRepository _checkoutRepo = CheckoutRepositoryImpl();
+
+  // Status checkout (untuk loading indicator)
+  bool _isCheckingOut = false;
+  String? _checkoutError;
 
   List<CartItem> get items => _items;
+  bool get isCheckingOut => _isCheckingOut;
+  String? get checkoutError => _checkoutError;
 
   double get totalPrice {
     return _items.fold(0, (sum, item) => sum + item.totalPrice);
@@ -45,6 +54,28 @@ class CartProvider extends ChangeNotifier {
         _items.removeAt(index);
       }
       notifyListeners();
+    }
+  }
+
+  /// Kirim data checkout ke backend Golang
+  /// Return true jika sukses, false jika gagal
+  Future<bool> checkout() async {
+    _isCheckingOut = true;
+    _checkoutError = null;
+    notifyListeners();
+
+    try {
+      await _checkoutRepo.processCheckout(totalPrice, _items);
+      // Sukses! Bersihkan keranjang
+      _items.clear();
+      _isCheckingOut = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _checkoutError = e.toString();
+      _isCheckingOut = false;
+      notifyListeners();
+      return false;
     }
   }
 
