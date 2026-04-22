@@ -131,7 +131,7 @@ class ProductCard extends StatelessWidget {
                         color: AppColors.secondary,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.add, size: 16, color: AppColors.surface),
+                      child: const Icon(Icons.add_shopping_cart, size: 16, color: AppColors.surface),
                     ),
                   ),
               ],
