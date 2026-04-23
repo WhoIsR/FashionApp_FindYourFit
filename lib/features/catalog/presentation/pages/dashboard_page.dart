@@ -148,8 +148,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: AppColors.surfaceContainer,
                       ), // Latar belakang abu-abu agar blur App Bar terlihat pekat di bagian atas
                       Positioned(
-                        top:
-                            120, // Memaksa posisi gambar 90px ke bawah agar kepala 100% aman
+                        top: 120,
                         left: 0,
                         right: 0,
                         bottom: 0,
@@ -356,6 +355,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           price: productState.products[0].price,
                           imageUrl: productState.products[0].imageUrl,
                           category: productState.products[0].category,
+                          stock: productState.products[0].stock,
                           isLarge: true,
                           onAddToCart: () =>
                               _addToCart(context, productState.products[0]),
@@ -379,6 +379,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 price: productState.products[1].price,
                                 imageUrl: productState.products[1].imageUrl,
                                 category: productState.products[1].category,
+                                stock: productState.products[1].stock,
                                 onAddToCart: () => _addToCart(
                                   context,
                                   productState.products[1],
@@ -386,20 +387,21 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                             ),
                             const SizedBox(width: 16),
-                            if (productState.products.length > 2)
+                            if (productState.products.length > 5)
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                     top: 48,
                                   ), // Asymmetric offset
                                   child: ProductCard(
-                                    name: productState.products[2].name,
-                                    price: productState.products[2].price,
-                                    imageUrl: productState.products[2].imageUrl,
-                                    category: productState.products[2].category,
+                                    name: productState.products[5].name,
+                                    price: productState.products[5].price,
+                                    imageUrl: productState.products[5].imageUrl,
+                                    category: productState.products[5].category,
+                                    stock: productState.products[5].stock,
                                     onAddToCart: () => _addToCart(
                                       context,
-                                      productState.products[2],
+                                      productState.products[5],
                                     ),
                                   ),
                                 ),
@@ -503,6 +505,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 price: p.price,
                                 imageUrl: p.imageUrl,
                                 category: p.category,
+                                stock: p.stock,
                                 onAddToCart: () => _addToCart(context, p),
                               ),
                             );
