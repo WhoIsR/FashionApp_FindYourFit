@@ -491,8 +491,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
-                          itemCount:
-                              10, // Menampilkan 10 item biar bisa digeser (duplikasi simulasi)
+                          itemCount: 6, // Menampilkan 6 item biar bisa digeser
                           itemBuilder: (context, index) {
                             final p = productState
                                 .products[index % productState.products.length];
