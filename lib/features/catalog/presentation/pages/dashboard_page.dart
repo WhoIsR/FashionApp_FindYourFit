@@ -38,8 +38,13 @@ class _DashboardPageState extends State<DashboardPage> {
     context.read<CartProvider>().addToCart(product);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${product.name.toUpperCase()} added to bag', 
-          style: GoogleFonts.manrope(color: AppColors.surface, fontWeight: FontWeight.bold)),
+        content: Text(
+          '${product.name.toUpperCase()} added to bag',
+          style: GoogleFonts.manrope(
+            color: AppColors.surface,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: AppColors.onSurface,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
@@ -352,7 +357,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           imageUrl: productState.products[0].imageUrl,
                           category: productState.products[0].category,
                           isLarge: true,
-                          onAddToCart: () => _addToCart(context, productState.products[0]),
+                          onAddToCart: () =>
+                              _addToCart(context, productState.products[0]),
                         ),
                       ),
 
@@ -373,7 +379,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                 price: productState.products[1].price,
                                 imageUrl: productState.products[1].imageUrl,
                                 category: productState.products[1].category,
-                                onAddToCart: () => _addToCart(context, productState.products[1]),
+                                onAddToCart: () => _addToCart(
+                                  context,
+                                  productState.products[1],
+                                ),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -388,7 +397,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                     price: productState.products[2].price,
                                     imageUrl: productState.products[2].imageUrl,
                                     category: productState.products[2].category,
-                                    onAddToCart: () => _addToCart(context, productState.products[2]),
+                                    onAddToCart: () => _addToCart(
+                                      context,
+                                      productState.products[2],
+                                    ),
                                   ),
                                 ),
                               )
