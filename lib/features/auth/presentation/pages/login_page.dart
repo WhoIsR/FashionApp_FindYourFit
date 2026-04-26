@@ -33,6 +33,17 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  void _togglePasswordVisibility() {
+    setState(() => _showPass = !_showPass);
+  }
+
+  void _goToRegister() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const RegisterPage()),
+    );
+  }
+
   void _handleLoginResult(bool success, AuthProvider auth) {
     if (success) {
       Navigator.pushReplacementNamed(context, AppRouter.dashboard);
@@ -66,98 +77,135 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = context.watch<AuthProvider>().isLoading;
+    final auth = context.watch<AuthProvider>();
+    final media = MediaQuery.of(context);
+    final size = media.size;
+    final keyboardOpen = media.viewInsets.bottom > 0;
+
+    final isSmallHeight = size.height < 760;
+    final horizontalPadding = size.width < 360 ? 20.0 : 32.0;
+    final verticalPadding = isSmallHeight ? 20.0 : 32.0;
+    final largeGap = isSmallHeight ? 28.0 : 48.0;
+    final mediumGap = isSmallHeight ? 16.0 : 24.0;
 
     return LoadingOverlay(
-      isLoading: isLoading,
+      isLoading: auth.isLoading,
       child: Scaffold(
         backgroundColor: AppColors.surface,
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const AuthHeader(
-                    title: 'Welcome to FindYourFit',
-                    subtitle:
-                        'Access your personal wardrobe and curated collections.',
-                  ),
-                  const SizedBox(height: 48),
-                  CustomTextField(
-                    label: 'Email Address',
-                    hint: 'name@couture.com',
-                    controller: _emailCtrl,
-                    validator: (v) =>
-                        (v?.isEmpty ?? true) ? 'Isi emailnya bro' : null,
-                  ),
-                  const SizedBox(height: 24),
-                  CustomTextField(
-                    label: 'Password',
-                    hint: '••••••••',
-                    controller: _passCtrl,
-                    obscureText: !_showPass,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _showPass ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
-                      ),
-                      onPressed: () => setState(() => _showPass = !_showPass),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final availableHeight =
+                  (constraints.maxHeight - (verticalPadding * 2))
+                      .clamp(0.0, double.infinity)
+                      .toDouble();
+
+              return SingleChildScrollView(
+                physics: keyboardOpen
+                    ? const ClampingScrollPhysics()
+                    : const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                  vertical: verticalPadding,
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: availableHeight),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const AuthHeader(
+                          title: 'Welcome to FindYourFit',
+                          subtitle:
+                              'Access your personal wardrobe and curated collections.',
+                        ),
+                        SizedBox(height: largeGap),
+                        _buildEmailField(),
+                        SizedBox(height: mediumGap),
+                        _buildPasswordField(),
+                        SizedBox(height: largeGap),
+                        CustomButton(
+                          label: 'SIGN IN',
+                          onPressed: _loginEmail,
+                          isLoading: auth.isLoading,
+                        ),
+                        SizedBox(height: mediumGap),
+                        const DividerWithText(text: 'OR'),
+                        SizedBox(height: mediumGap),
+                        GoogleSignInButton(
+                          onPressed: _loginGoogle,
+                          isLoading: auth.isLoading,
+                        ),
+                        SizedBox(height: largeGap),
+                        _buildRegisterSection(),
+                      ],
                     ),
-                    validator: (v) =>
-                        (v?.isEmpty ?? true) ? 'Password jangan lupa' : null,
                   ),
-                  const SizedBox(height: 48),
-                  CustomButton(
-                    label: 'SIGN IN',
-                    onPressed: _loginEmail,
-                    isLoading: isLoading,
-                  ),
-                  const SizedBox(height: 24),
-                  const DividerWithText(text: 'OR'),
-                  const SizedBox(height: 24),
-                  GoogleSignInButton(
-                    onPressed: _loginGoogle,
-                    isLoading: isLoading,
-                  ),
-                  const SizedBox(height: 48),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'New to FindYourFit? ',
-                        style: GoogleFonts.manrope(
-                          color: AppColors.onSurfaceVariant,
-                          fontSize: 14,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const RegisterPage(),
-                          ),
-                        ),
-                        child: Text(
-                          'Create an account',
-                          style: GoogleFonts.manrope(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.secondary,
-                            fontSize: 14,
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppColors.secondary.withOpacity(0.3),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmailField() {
+    return CustomTextField(
+      label: 'Email Address',
+      hint: 'name@couture.com',
+      controller: _emailCtrl,
+      validator: (v) => (v?.isEmpty ?? true) ? 'Isi emailnya bro' : null,
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return CustomTextField(
+      label: 'Password',
+      hint: '••••••••',
+      controller: _passCtrl,
+      obscureText: !_showPass,
+      suffixIcon: IconButton(
+        icon: Icon(
+          _showPass ? Icons.visibility_off : Icons.visibility,
+          color: Colors.grey,
+        ),
+        onPressed: _togglePasswordVisibility,
+      ),
+      validator: (v) => (v?.isEmpty ?? true) ? 'Password jangan lupa' : null,
+    );
+  }
+
+  Widget _buildRegisterSection() {
+    return Center(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 4,
+        runSpacing: 2,
+        children: [
+          Text(
+            'New to FindYourFit?',
+            style: GoogleFonts.manrope(
+              color: AppColors.onSurfaceVariant,
+              fontSize: 14,
+            ),
+          ),
+          GestureDetector(
+            onTap: _goToRegister,
+            child: Text(
+              'Create an account',
+              style: GoogleFonts.manrope(
+                fontWeight: FontWeight.bold,
+                color: AppColors.secondary,
+                fontSize: 14,
+                decoration: TextDecoration.underline,
+                decorationColor: AppColors.secondary.withOpacity(0.3),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

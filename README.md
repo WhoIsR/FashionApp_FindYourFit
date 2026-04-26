@@ -8,8 +8,8 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Pemrograman Mobile Lanjutan 
 
 ## Preview
 
-| Splash Screen | Katalog (Dashboard) | Keranjang Belanja |
-|---|---|---|
+| Splash Screen                                      | Katalog (Dashboard)                                                   | Keranjang Belanja                                |
+| -------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------ |
 | Tampilan editorial dengan pengecekan sesi otomatis | Layout asimetris, hero banner, kategori filter, dan horizontal scroll | Daftar item dengan kontrol quantity dan checkout |
 
 ---
@@ -17,6 +17,7 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Pemrograman Mobile Lanjutan 
 ## Fitur Utama
 
 ### Autentikasi
+
 - Registrasi akun baru dengan validasi email (wajib verifikasi lewat link email)
 - Login menggunakan email & password
 - Login menggunakan akun Google (Google Sign-In)
@@ -24,6 +25,7 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Pemrograman Mobile Lanjutan 
 - Logout dari halaman profil
 
 ### Katalog Produk
+
 - Data produk diambil langsung dari backend Golang via REST API
 - Layout editorial premium dengan hero banner full-bleed dan grid asimetris
 - Filter kategori produk (All Pieces, Outerwear, Knitwear, Accessories)
@@ -35,6 +37,7 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Pemrograman Mobile Lanjutan 
 - Pull-to-refresh untuk memuat ulang data dari server
 
 ### Keranjang Belanja
+
 - Menambah produk ke keranjang langsung dari katalog (dengan Snackbar feedback)
 - Badge dinamis di ikon keranjang yang menunjukkan jumlah item
 - Halaman keranjang dengan:
@@ -44,6 +47,7 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Pemrograman Mobile Lanjutan 
   - Kalkulasi subtotal secara real-time
 
 ### Checkout
+
 - Tombol checkout mengirimkan data pesanan ke backend Golang (`POST /v1/checkout`)
 - Loading spinner saat proses berlangsung
 - Data pesanan tersimpan di tabel `orders` dan `order_items` di MySQL
@@ -53,6 +57,7 @@ Proyek ini dikembangkan sebagai tugas mata kuliah **Pemrograman Mobile Lanjutan 
 - Penanganan error: jika server tidak merespons atau stok tidak cukup, muncul Snackbar dengan pesan kesalahan
 
 ### UI/UX
+
 - Desain editorial high-end terinspirasi dari brand fashion premium
 - Efek glassmorphism (blur) pada App Bar dan Bottom Navigation Bar
 - Tipografi ganda: **Noto Serif** untuk judul editorial, **Manrope** untuk label dan body text
@@ -93,6 +98,7 @@ lib/
 ```
 
 Setiap modul fitur memiliki tiga layer:
+
 - **Data** — Implementasi konkret (HTTP request, JSON parsing)
 - **Domain** — Kontrak abstrak dan model bisnis (tidak bergantung pada framework)
 - **Presentation** — UI dan state management (Provider + ChangeNotifier)
@@ -101,11 +107,11 @@ Setiap modul fitur memiliki tiga layer:
 
 Menggunakan **Provider** dengan `ChangeNotifier`. Terdapat tiga provider utama yang didaftarkan di `main.dart` via `MultiProvider`:
 
-| Provider | Tanggung Jawab |
-|---|---|
-| `AuthProvider` | Status login, registrasi, verifikasi email, logout |
-| `ProductProvider` | Daftar produk dari backend, status loading/error |
-| `CartProvider` | Item keranjang, kalkulasi harga, proses checkout |
+| Provider          | Tanggung Jawab                                     |
+| ----------------- | -------------------------------------------------- |
+| `AuthProvider`    | Status login, registrasi, verifikasi email, logout |
+| `ProductProvider` | Daftar produk dari backend, status loading/error   |
+| `CartProvider`    | Item keranjang, kalkulasi harga, proses checkout   |
 
 Setiap perubahan data memanggil `notifyListeners()` agar widget yang menggunakan `context.watch()` otomatis ter-rebuild.
 
@@ -113,16 +119,16 @@ Setiap perubahan data memanggil `notifyListeners()` agar widget yang menggunakan
 
 ## Tech Stack
 
-| Komponen | Teknologi |
-|---|---|
-| Frontend | Flutter (Dart) |
-| Backend | Golang (Gin Framework) |
-| Database | MySQL (via GORM) |
-| Autentikasi | Firebase Authentication |
-| HTTP Client | Dio (dengan interceptor JWT otomatis) |
-| State Management | Provider + ChangeNotifier |
-| Penyimpanan Lokal | flutter_secure_storage (encrypted) |
-| Font | Google Fonts (Noto Serif, Manrope) |
+| Komponen          | Teknologi                             |
+| ----------------- | ------------------------------------- |
+| Frontend          | Flutter (Dart)                        |
+| Backend           | Golang (Gin Framework)                |
+| Database          | MySQL (via GORM)                      |
+| Autentikasi       | Firebase Authentication               |
+| HTTP Client       | Dio (dengan interceptor JWT otomatis) |
+| State Management  | Provider + ChangeNotifier             |
+| Penyimpanan Lokal | flutter_secure_storage (encrypted)    |
+| Font              | Google Fonts (Noto Serif, Manrope)    |
 
 ---
 
@@ -160,6 +166,14 @@ flutter run
 Backend Golang untuk proyek ini tersedia di repository terpisah:
 
 🔗 [bhaa_firebase_backend](https://github.com/WhoIsR/bhaa_firebase_backend)
+
+---
+
+## Dokumentasi UTS
+
+Video dokumentasi aplikasi tersedia di YouTube:
+
+🎥 [Dokumentasi UTS Fashion App](https://youtu.be/c73Jx_e4xt4)
 
 ---
 

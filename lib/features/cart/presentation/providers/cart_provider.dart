@@ -36,7 +36,6 @@ class CartProvider extends ChangeNotifier {
       _items.add(CartItem(product: product, quantity: 1));
     }
 
-    // WAJIB: memanggil notifyListeners agar UI ter-update
     notifyListeners();
   }
 
@@ -44,7 +43,7 @@ class CartProvider extends ChangeNotifier {
     _items.removeWhere((item) => item.product.id == productId);
     notifyListeners();
   }
-  
+
   void decreaseQuantity(int productId) {
     final index = _items.indexWhere((item) => item.product.id == productId);
     if (index >= 0) {

@@ -1,4 +1,5 @@
 import 'package:fashion_app/core/routes/app_router.dart';
+import 'package:fashion_app/core/providers/theme_provider.dart';
 import 'package:fashion_app/core/theme/app_theme.dart';
 import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:fashion_app/features/catalog/presentation/providers/product_provider.dart';
@@ -18,10 +19,11 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(
           create: (_) => ProductProvider(),
-        ), // <-- Tambahin ini
+        ), 
         ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: const MyApp(),
@@ -34,10 +36,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return MaterialApp(
       title: 'FindYourFit',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: themeProvider.themeMode,
       initialRoute: AppRouter.splash,
       routes: AppRouter.routes,
     );

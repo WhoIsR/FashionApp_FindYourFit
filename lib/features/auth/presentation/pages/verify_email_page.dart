@@ -35,7 +35,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     super.dispose();
   }
 
-  // 1. Fungsi ngecek status verifikasi tiap 5 detik
+  // 1. Fungsi ngecek status verifikasi tiap 3 detik
   void _startPolling() {
     _pollingTimer = Timer.periodic(const Duration(seconds: 3), (_) async {
       if (!mounted) return;
