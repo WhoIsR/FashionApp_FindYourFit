@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
 class AppTheme {
+  // ☀️ TEMA TERANG (Light Mode)
   static ThemeData get light {
     final lightColorScheme =
         ColorScheme.fromSeed(
@@ -17,6 +18,7 @@ class AppTheme {
         );
 
     return ThemeData(
+      useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: lightColorScheme,
       scaffoldBackgroundColor: AppColors.surface,
@@ -37,32 +39,34 @@ class AppTheme {
     );
   }
 
+  // 🌙 TEMA GELAP (Dark Mode)
   static ThemeData get dark {
     final darkColorScheme =
         ColorScheme.fromSeed(
-          seedColor: AppColors.secondaryLight,
+          seedColor: AppColors.darkSecondary,
           brightness: Brightness.dark,
         ).copyWith(
-          primary: AppColors.secondaryLight,
-          secondary: AppColors.secondary,
+          primary: AppColors.darkPrimary,
+          secondary: AppColors.darkSecondary,
           surface: AppColors.darkSurface,
           onSurface: AppColors.darkOnSurface,
           outline: AppColors.darkOutline,
           outlineVariant: AppColors.darkOutlineVariant,
-          inverseSurface: AppColors.darkInverseSurface,
-          onInverseSurface: AppColors.darkInverseOnSurface,
         );
 
     return ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: darkColorScheme,
       scaffoldBackgroundColor: AppColors.darkBackground,
-      primaryColor: AppColors.secondaryLight,
-      fontFamily: 'Manrope',
+      primaryColor: AppColors.darkOnSurface,
+      fontFamily: 'Manrope', //
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.darkSurface,
+        backgroundColor: AppColors.darkBackground,
         elevation: 0,
-        iconTheme: IconThemeData(color: AppColors.darkOnSurface),
+        iconTheme: IconThemeData(
+          color: AppColors.darkOnSurface,
+        ), // Ikon jadi terang
         titleTextStyle: TextStyle(
           fontFamily: 'Noto Serif',
           color: AppColors.darkOnSurface,
@@ -70,29 +74,6 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           letterSpacing: -0.5,
         ),
-      ),
-      textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: AppColors.darkOnSurface),
-        bodyMedium: TextStyle(color: AppColors.darkOnSurface),
-        bodySmall: TextStyle(color: AppColors.darkOnSurfaceVariant),
-        titleLarge: TextStyle(color: AppColors.darkOnSurface),
-        titleMedium: TextStyle(color: AppColors.darkOnSurface),
-      ),
-      hintColor: AppColors.darkOutline,
-      dividerColor: AppColors.darkOutlineVariant,
-      switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
-            return AppColors.secondaryLight;
-          }
-          return AppColors.darkOutline;
-        }),
-        trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
-            return AppColors.secondaryLight.withOpacity(0.4);
-          }
-          return AppColors.darkOutlineVariant.withOpacity(0.6);
-        }),
       ),
     );
   }
