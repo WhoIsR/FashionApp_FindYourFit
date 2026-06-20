@@ -8,6 +8,7 @@ class BiometricLockProvider extends ChangeNotifier {
 
   bool _isLocked = false;
   bool _isBiometricAvailable = false;
+  bool _hasUnlockedThisSession = false;
   String? _errorMessage;
 
   BiometricLockProvider({BiometricAuthService? service})
@@ -15,6 +16,7 @@ class BiometricLockProvider extends ChangeNotifier {
 
   bool get isLocked => _isLocked;
   bool get isBiometricAvailable => _isBiometricAvailable;
+  bool get hasUnlockedThisSession => _hasUnlockedThisSession;
   String? get errorMessage => _errorMessage;
 
   Future<void> initialize() async {
@@ -24,6 +26,13 @@ class BiometricLockProvider extends ChangeNotifier {
 
   void lock() {
     if (_isBiometricAvailable) {
+      _isLocked = true;
+      notifyListeners();
+    }
+  }
+
+  void requireUnlock() {
+    if (_isBiometricAvailable && !_hasUnlockedThisSession) {
       _isLocked = true;
       notifyListeners();
     }
@@ -39,6 +48,7 @@ class BiometricLockProvider extends ChangeNotifier {
     try {
       await _service.authenticate();
       _isLocked = false;
+      _hasUnlockedThisSession = true;
       _errorMessage = null;
     } on BiometricException catch (e) {
       _errorMessage = e.userMessage;

@@ -77,4 +77,23 @@ void main() {
     expect(provider.isLocked, isTrue);
     expect(provider.errorMessage, 'Autentikasi dibatalkan.');
   });
+
+  test('requireUnlock only locks once after session is unlocked', () async {
+    final service = FakeBiometricService(available: true);
+    final provider = BiometricLockProvider(service: service);
+
+    await provider.initialize();
+    provider.requireUnlock();
+
+    expect(provider.isLocked, isTrue);
+
+    await provider.unlock();
+    provider.requireUnlock();
+
+    expect(provider.isLocked, isFalse);
+
+    provider.lock();
+
+    expect(provider.isLocked, isTrue);
+  });
 }
