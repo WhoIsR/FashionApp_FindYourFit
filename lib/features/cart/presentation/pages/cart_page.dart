@@ -262,7 +262,7 @@ class CartPage extends StatelessWidget {
                             elevation: 0,
                           ),
                           child: cartState.isCheckingOut
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 24,
                                   height: 24,
                                   child: CircularProgressIndicator(
