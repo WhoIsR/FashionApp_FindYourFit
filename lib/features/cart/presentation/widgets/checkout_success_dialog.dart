@@ -56,14 +56,16 @@ class CheckoutSuccessDialog extends StatelessWidget {
                 onPressed: () {
                   // Tutup dialog
                   Navigator.pop(context);
-                  
+
                   // Kembali ke katalog utama
                   Navigator.pop(context);
                 },
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.onSurface,
                   side: const BorderSide(color: AppColors.onSurface),
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
                 ),
                 child: Text(
                   'BACK TO SHOPPING',

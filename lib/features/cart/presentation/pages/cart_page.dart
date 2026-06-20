@@ -60,13 +60,21 @@ class CartPage extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: colorScheme.onSurface,
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
                       side: BorderSide(color: colorScheme.outlineVariant),
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
                     ),
                     child: Text(
                       'CONTINUE SHOPPING',
-                      style: GoogleFonts.manrope(fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                      style: GoogleFonts.manrope(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                      ),
                     ),
                   ),
                 ],
@@ -102,7 +110,7 @@ class CartPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          
+
                           // Product Details
                           Expanded(
                             child: Column(
@@ -138,13 +146,15 @@ class CartPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          
+
                           // Quantity Controls
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               IconButton(
-                                onPressed: () => context.read<CartProvider>().removeFromCart(item.product.id),
+                                onPressed: () => context
+                                    .read<CartProvider>()
+                                    .removeFromCart(item.product.id),
                                 icon: Icon(
                                   Icons.close,
                                   size: 20,
@@ -163,20 +173,32 @@ class CartPage extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     InkWell(
-                                      onTap: () => context.read<CartProvider>().decreaseQuantity(item.product.id),
+                                      onTap: () => context
+                                          .read<CartProvider>()
+                                          .decreaseQuantity(item.product.id),
                                       child: const Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
                                         child: Icon(Icons.remove, size: 16),
                                       ),
                                     ),
                                     Text(
                                       '${item.quantity}',
-                                      style: GoogleFonts.manrope(fontWeight: FontWeight.bold),
+                                      style: GoogleFonts.manrope(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     InkWell(
-                                      onTap: () => context.read<CartProvider>().addToCart(item.product),
+                                      onTap: () => context
+                                          .read<CartProvider>()
+                                          .addToCart(item.product),
                                       child: const Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
                                         child: Icon(Icons.add, size: 16),
                                       ),
                                     ),
@@ -190,16 +212,14 @@ class CartPage extends StatelessWidget {
                     },
                   ),
                 ),
-                
+
                 // Bottom Checkout Section
                 Container(
                   padding: const EdgeInsets.all(32),
                   decoration: BoxDecoration(
                     color: colorScheme.surface,
                     border: Border(
-                      top: BorderSide(
-                        color: colorScheme.surfaceContainerHigh,
-                      ),
+                      top: BorderSide(color: colorScheme.surfaceContainerHigh),
                     ),
                   ),
                   child: Column(
@@ -233,18 +253,24 @@ class CartPage extends StatelessWidget {
                           onPressed: cartState.isCheckingOut
                               ? null
                               : () async {
-                                  final success = await context.read<CartProvider>().checkout();
+                                  final success = await context
+                                      .read<CartProvider>()
+                                      .checkout();
                                   if (success && context.mounted) {
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
-                                      builder: (_) => const CheckoutSuccessDialog(),
+                                      builder: (_) =>
+                                          const CheckoutSuccessDialog(),
                                     );
                                   } else if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          context.read<CartProvider>().checkoutError ?? 'Checkout gagal',
+                                          context
+                                                  .read<CartProvider>()
+                                                  .checkoutError ??
+                                              'Checkout gagal',
                                           style: GoogleFonts.manrope(
                                             color: colorScheme.surface,
                                           ),
@@ -258,7 +284,9 @@ class CartPage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: colorScheme.onSurface,
                             foregroundColor: colorScheme.surface,
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
                             elevation: 0,
                           ),
                           child: cartState.isCheckingOut

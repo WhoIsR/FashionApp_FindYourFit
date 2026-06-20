@@ -4,10 +4,7 @@ import 'package:fashion_app/core/services/biometric_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class FakeBiometricService implements BiometricAuthService {
-  FakeBiometricService({
-    required this.available,
-    this.shouldThrow = false,
-  });
+  FakeBiometricService({required this.available, this.shouldThrow = false});
 
   final bool available;
   final bool shouldThrow;
@@ -66,17 +63,20 @@ void main() {
     expect(service.authenticateCalls, 1);
   });
 
-  test('unlock keeps lock and stores error message on biometric failure', () async {
-    final service = FakeBiometricService(available: true, shouldThrow: true);
-    final provider = BiometricLockProvider(service: service);
+  test(
+    'unlock keeps lock and stores error message on biometric failure',
+    () async {
+      final service = FakeBiometricService(available: true, shouldThrow: true);
+      final provider = BiometricLockProvider(service: service);
 
-    await provider.initialize();
-    provider.lock();
-    await provider.unlock();
+      await provider.initialize();
+      provider.lock();
+      await provider.unlock();
 
-    expect(provider.isLocked, isTrue);
-    expect(provider.errorMessage, 'Autentikasi dibatalkan.');
-  });
+      expect(provider.isLocked, isTrue);
+      expect(provider.errorMessage, 'Autentikasi dibatalkan.');
+    },
+  );
 
   test('requireUnlock only locks once after session is unlocked', () async {
     final service = FakeBiometricService(available: true);

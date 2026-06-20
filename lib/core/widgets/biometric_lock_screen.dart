@@ -78,10 +78,7 @@ class _LockedView extends StatelessWidget {
   final String? errorMessage;
   final VoidCallback onUnlock;
 
-  const _LockedView({
-    required this.errorMessage,
-    required this.onUnlock,
-  });
+  const _LockedView({required this.errorMessage, required this.onUnlock});
 
   @override
   Widget build(BuildContext context) {

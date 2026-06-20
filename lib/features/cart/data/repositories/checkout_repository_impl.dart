@@ -11,11 +11,15 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
       // Susun data sesuai format yang diharapkan backend Golang
       final payload = {
         'total_price': totalPrice,
-        'items': items.map((item) => {
-          'product_id': item.product.id,
-          'quantity': item.quantity,
-          'price': item.product.price,
-        }).toList(),
+        'items': items
+            .map(
+              (item) => {
+                'product_id': item.product.id,
+                'quantity': item.quantity,
+                'price': item.product.price,
+              },
+            )
+            .toList(),
       };
 
       await DioClient.instance.post(ApiConstants.checkout, data: payload);

@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
     final authState = context.watch<AuthProvider>();
     final themeProvider = context.watch<ThemeProvider>();
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -69,9 +69,7 @@ class ProfilePage extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    themeProvider.isDark
-                        ? Icons.dark_mode
-                        : Icons.light_mode,
+                    themeProvider.isDark ? Icons.dark_mode : Icons.light_mode,
                     color: themeProvider.isDark
                         ? Colors.amber
                         : colorScheme.onSurfaceVariant,
@@ -89,8 +87,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   Switch(
                     value: themeProvider.isDark,
-                    onChanged: (_) =>
-                        context.read<ThemeProvider>().toggle(),
+                    onChanged: (_) => context.read<ThemeProvider>().toggle(),
                   ),
                 ],
               ),
@@ -109,11 +106,17 @@ class ProfilePage extends StatelessWidget {
                     await authState.logout();
                     if (context.mounted) {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, AppRouter.login, (route) => false);
+                        context,
+                        AppRouter.login,
+                        (route) => false,
+                      );
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 48,
+                      vertical: 16,
+                    ),
                     child: Text(
                       'LOG OUT',
                       style: GoogleFonts.manrope(

@@ -23,9 +23,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(
-          create: (_) => ProductProvider(),
-        ), 
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(
           create: (_) => BiometricLockProvider()..initialize(),
@@ -52,9 +50,7 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRouter.splash,
       routes: AppRouter.routes,
       builder: (context, child) {
-        return BiometricLockScreen(
-          child: child ?? const SizedBox.shrink(),
-        );
+        return BiometricLockScreen(child: child ?? const SizedBox.shrink());
       },
     );
   }

@@ -9,7 +9,7 @@ class AppColors {
   static const Color secondaryDim = Color(0xFF6D4E00);
 
   // ===========================================================================
-  // ☀️ LIGHT MODE PALETTE 
+  // ☀️ LIGHT MODE PALETTE
   // ===========================================================================
   static const Color background = Color(0xFFFAF9F6);
   static const Color surface = Color(0xFFFAF9F6);
@@ -30,9 +30,8 @@ class AppColors {
   static const Color inverseSurface = Color(0xFF0D0F0D);
   static const Color inverseOnSurface = Color(0xFF9D9D9A);
 
-
   // ===========================================================================
-  // 🌙 DARK MODE PALETTE 
+  // 🌙 DARK MODE PALETTE
   // ===========================================================================
   // Brand color untuk dark mode (dibuat sedikit lebih terang biar pop-up di background hitam)
   static const Color darkPrimary = Color(0xFF9E9D9D); // Abu-abu lebih terang
@@ -42,7 +41,7 @@ class AppColors {
   // Latar belakang pakai warna InverseSurface lu (Super Gelap)
   static const Color darkBackground = Color(0xFF0D0F0D);
   static const Color darkSurface = Color(0xFF0D0F0D);
-  static const Color darkSurfaceDim = Color(0xFF141714); 
+  static const Color darkSurfaceDim = Color(0xFF141714);
 
   // Container dibuat bertingkat gradasi abu-abunya (makin high, makin terang dikit)
   static const Color darkSurfaceContainerLowest = Color(0xFF000000);
@@ -55,7 +54,7 @@ class AppColors {
   static const Color darkOnSurface = Color(0xFFE6E9E4); // Teks putih tulang
   static const Color darkOnSurfaceVariant = Color(0xFFAFB3AE); // Teks abu-abu
 
-  static const Color darkOutline = Color(0xFF777C77); 
+  static const Color darkOutline = Color(0xFF777C77);
   static const Color darkOutlineVariant = Color(0xFF404440); // Border gelap
 
   static const Color darkInverseSurface = Color(0xFFFAF9F6); // Latar terang

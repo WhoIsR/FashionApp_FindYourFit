@@ -12,7 +12,7 @@ class BiometricLockProvider extends ChangeNotifier {
   String? _errorMessage;
 
   BiometricLockProvider({BiometricAuthService? service})
-      : _service = service ?? BiometricService();
+    : _service = service ?? BiometricService();
 
   bool get isLocked => _isLocked;
   bool get isBiometricAvailable => _isBiometricAvailable;
