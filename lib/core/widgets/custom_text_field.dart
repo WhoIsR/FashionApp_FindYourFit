@@ -46,14 +46,14 @@ class CustomTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
-              color: AppColors.outlineVariant.withOpacity(0.5),
+              color: AppColors.outlineVariant.withValues(alpha: 0.5),
             ),
             suffixIcon: suffixIcon,
             filled: false,
             // Ghost Border 15% opacity
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: AppColors.outlineVariant.withOpacity(0.3),
+                color: AppColors.outlineVariant.withValues(alpha: 0.3),
               ),
             ),
             // Berubah emas saat diklik

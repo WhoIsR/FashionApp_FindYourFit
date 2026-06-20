@@ -142,7 +142,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: AppColors.secondary,
                             fontSize: 14,
                             decoration: TextDecoration.underline,
-                            decorationColor: AppColors.secondary.withOpacity(0.3),
+                            decorationColor: AppColors.secondary.withValues(
+                              alpha: 0.3,
+                            ),
                           ),
                         ),
                       ),

@@ -10,7 +10,9 @@ class DividerWithText extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Divider(color: AppColors.outlineVariant.withOpacity(0.3)),
+          child: Divider(
+            color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -26,7 +28,9 @@ class DividerWithText extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Divider(color: AppColors.outlineVariant.withOpacity(0.3)),
+          child: Divider(
+            color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          ),
         ),
       ],
     );

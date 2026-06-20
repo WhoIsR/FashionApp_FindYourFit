@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'register_page.dart';
-import 'verify_email_page.dart';
 import '../../../../core/routes/app_router.dart';
 
 class LoginPage extends StatefulWidget {
@@ -201,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: AppColors.secondary,
                 fontSize: 14,
                 decoration: TextDecoration.underline,
-                decorationColor: AppColors.secondary.withOpacity(0.3),
+                decorationColor: AppColors.secondary.withValues(alpha: 0.3),
               ),
             ),
           ),
