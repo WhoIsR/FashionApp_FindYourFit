@@ -1,4 +1,3 @@
-import 'package:fashion_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,6 +25,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final bool isSoldOut = stock == 0;
     final bool isLowStock = stock > 0 && stock <= 5;
 
@@ -42,7 +42,7 @@ class ProductCard extends StatelessWidget {
               children: [
                 // Gambar produk
                 Container(
-                  color: AppColors.surfaceContainer,
+                  color: colorScheme.surfaceContainer,
                   child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
@@ -61,7 +61,7 @@ class ProductCard extends StatelessWidget {
                     right: 0,
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      color: AppColors.onSurface.withValues(alpha: 0.85),
+                      color: colorScheme.onSurface.withValues(alpha: 0.85),
                       child: Center(
                         child: Text(
                           'SOLD OUT',
@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 2.5,
-                            color: AppColors.surface,
+                            color: colorScheme.surface,
                           ),
                         ),
                       ),
@@ -87,9 +87,9 @@ class ProductCard extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.surface.withValues(alpha: 0.9),
+                        color: colorScheme.surface.withValues(alpha: 0.9),
                         border: Border.all(
-                          color: AppColors.secondary.withValues(alpha: 0.4),
+                          color: colorScheme.secondary.withValues(alpha: 0.4),
                         ),
                       ),
                       child: Text(
@@ -98,7 +98,7 @@ class ProductCard extends StatelessWidget {
                           fontSize: 9,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 2.0,
-                          color: AppColors.secondary,
+                          color: colorScheme.secondary,
                         ),
                       ),
                     ),
@@ -117,7 +117,7 @@ class ProductCard extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
-                    color: AppColors.onSurface,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -127,7 +127,7 @@ class ProductCard extends StatelessWidget {
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 2.0,
-                    color: AppColors.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -140,8 +140,8 @@ class ProductCard extends StatelessWidget {
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
                         color: isSoldOut
-                            ? AppColors.onSurfaceVariant
-                            : AppColors.secondary,
+                            ? colorScheme.onSurfaceVariant
+                            : colorScheme.secondary,
                       ),
                     ),
                     if (onAddToCart != null)
@@ -150,8 +150,8 @@ class ProductCard extends StatelessWidget {
                         icon: Icon(
                           Icons.add_shopping_cart,
                           color: isSoldOut
-                              ? AppColors.outlineVariant
-                              : AppColors.onSurface,
+                              ? colorScheme.outlineVariant
+                              : colorScheme.onSurface,
                         ),
                       ),
                   ],
@@ -167,7 +167,7 @@ class ProductCard extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 letterSpacing: -0.5,
-                color: AppColors.onSurface,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 2),
@@ -177,7 +177,7 @@ class ProductCard extends StatelessWidget {
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 2.0,
-                color: AppColors.onSurfaceVariant,
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 8),
@@ -190,8 +190,8 @@ class ProductCard extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: isSoldOut
-                        ? AppColors.onSurfaceVariant
-                        : AppColors.secondary,
+                        ? colorScheme.onSurfaceVariant
+                        : colorScheme.secondary,
                   ),
                 ),
                 if (onAddToCart != null)
@@ -204,8 +204,8 @@ class ProductCard extends StatelessWidget {
                         Icons.add_shopping_cart,
                         size: 18,
                         color: isSoldOut
-                            ? AppColors.outlineVariant
-                            : AppColors.onSurfaceVariant,
+                            ? colorScheme.outlineVariant
+                            : colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
