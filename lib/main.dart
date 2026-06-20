@@ -1,6 +1,8 @@
 import 'package:fashion_app/core/routes/app_router.dart';
+import 'package:fashion_app/core/providers/biometric_lock_provider.dart';
 import 'package:fashion_app/core/providers/theme_provider.dart';
 import 'package:fashion_app/core/theme/app_theme.dart';
+import 'package:fashion_app/core/widgets/biometric_lock_screen.dart';
 import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:fashion_app/features/catalog/presentation/providers/product_provider.dart';
 import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
@@ -25,6 +27,9 @@ void main() async {
           create: (_) => ProductProvider(),
         ), 
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(
+          create: (_) => BiometricLockProvider()..initialize(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -46,6 +51,11 @@ class MyApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       initialRoute: AppRouter.splash,
       routes: AppRouter.routes,
+      builder: (context, child) {
+        return BiometricLockScreen(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }
