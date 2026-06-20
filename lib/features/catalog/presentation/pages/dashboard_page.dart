@@ -3,7 +3,6 @@ import 'package:fashion_app/core/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../providers/product_provider.dart';
 import 'package:fashion_app/features/auth/presentation/pages/profile_page.dart';
 import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
@@ -41,11 +40,11 @@ class _DashboardPageState extends State<DashboardPage> {
         content: Text(
           '${product.name.toUpperCase()} added to bag',
           style: GoogleFonts.manrope(
-            color: AppColors.surface,
+            color: Theme.of(context).colorScheme.surface,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: AppColors.onSurface,
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
       ),
@@ -54,10 +53,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final productState = context.watch<ProductProvider>();
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
       extendBody: true,
       appBar: PreferredSize(
@@ -66,11 +66,11 @@ class _DashboardPageState extends State<DashboardPage> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: AppBar(
-              backgroundColor: AppColors.surface.withOpacity(0.75),
+              backgroundColor: colorScheme.surface.withValues(alpha: 0.75),
               elevation: 0,
               centerTitle: true,
               leading: IconButton(
-                icon: const Icon(Icons.menu, color: AppColors.onSurface),
+                icon: Icon(Icons.menu, color: colorScheme.onSurface),
                 onPressed: () {},
               ),
               title: Text(
@@ -79,7 +79,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   letterSpacing: -1.0,
-                  color: AppColors.onSurface,
+                  color: colorScheme.onSurface,
                 ),
               ),
               actions: [
@@ -87,9 +87,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   alignment: Alignment.center,
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.shopping_bag_outlined,
-                        color: AppColors.onSurface,
+                        color: colorScheme.onSurface,
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -106,14 +106,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           if (cart.totalItems == 0) return const SizedBox();
                           return Container(
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: AppColors.secondary,
+                            decoration: BoxDecoration(
+                              color: colorScheme.secondary,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               '${cart.totalItems}',
-                              style: const TextStyle(
-                                color: AppColors.surface,
+                              style: TextStyle(
+                                color: colorScheme.surface,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -131,7 +131,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
       body: RefreshIndicator(
-        color: AppColors.secondary,
+        color: colorScheme.secondary,
         onRefresh: () => context.read<ProductProvider>().fetchProducts(),
         child: CustomScrollView(
           slivers: [
@@ -145,7 +145,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     fit: StackFit.expand,
                     children: [
                       Container(
-                        color: AppColors.surfaceContainer,
+                        color: colorScheme.surfaceContainer,
                       ), // Latar belakang abu-abu agar blur App Bar terlihat pekat di bagian atas
                       Positioned(
                         top: 120,
@@ -156,8 +156,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           'https://lh3.googleusercontent.com/aida-public/AB6AXuCuuMf_mQdQQB-EMqobAclE5vTPPNXrL3AR0RT6c_muOWvkdofaO2SkynxUmeIm3q3G-K4U_9Paf5WkvPJwpqN1yVfh_nHSrPTEil4RNcmZ9sg19EVC4spO-z_iIhyWmkOoXCvXQPXCciFBdqcSc3Qp5ggldSPDtlMh_fnd0TsQP9e7z0k44uSGXvN3zFcjFVEW1QYPH8fUcCqwcBa5nb0L7XA8LU48htM8JjeAMfa-6ySfCO7Y-3wMJEPXBVcyjHj1mjtEeNmbl1A3',
                           fit: BoxFit.cover,
                           alignment: Alignment.topCenter,
-                          errorBuilder: (_, __, ___) =>
-                              Container(color: AppColors.surfaceContainerHigh),
+                          errorBuilder: (_, __, ___) => Container(
+                            color: colorScheme.surfaceContainerHigh,
+                          ),
                         ),
                       ),
                       Container(
@@ -166,7 +167,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [
-                              AppColors.onSurface.withOpacity(0.4),
+                              Colors.black.withValues(alpha: 0.4),
                               Colors.transparent,
                             ],
                           ),
@@ -182,7 +183,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             Text(
                               'SUMMER 2026',
                               style: GoogleFonts.manrope(
-                                color: AppColors.surface,
+                                color: Colors.white,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 3.0,
@@ -192,7 +193,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             Text(
                               'NEW COLLECTION',
                               style: GoogleFonts.notoSerif(
-                                color: AppColors.surface,
+                                color: Colors.white,
                                 fontSize: 48,
                                 fontWeight: FontWeight.bold,
                                 height: 1.0,
@@ -201,7 +202,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                             const SizedBox(height: 24),
                             Container(
-                              color: AppColors.surface,
+                              color: colorScheme.surface,
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
@@ -214,7 +215,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     child: Text(
                                       'EXPLORE NOW',
                                       style: GoogleFonts.manrope(
-                                        color: AppColors.onSurface,
+                                        color: colorScheme.onSurface,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         letterSpacing: 2.0,
@@ -236,7 +237,7 @@ class _DashboardPageState extends State<DashboardPage> {
             // 2. Category Filters
             SliverToBoxAdapter(
               child: Container(
-                color: AppColors.surfaceContainerLow,
+                color: colorScheme.surfaceContainerLow,
                 height: 80,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -254,7 +255,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           border: Border(
                             bottom: BorderSide(
                               color: isSelected
-                                  ? AppColors.secondary
+                                  ? colorScheme.secondary
                                   : Colors.transparent,
                               width: 1.5,
                             ),
@@ -264,8 +265,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           _categories[index].toUpperCase(),
                           style: GoogleFonts.manrope(
                             color: isSelected
-                                ? AppColors.onSurface
-                                : AppColors.onSurface.withOpacity(0.4),
+                                ? colorScheme.onSurface
+                                : colorScheme.onSurface.withValues(alpha: 0.4),
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 2.0,
@@ -281,9 +282,11 @@ class _DashboardPageState extends State<DashboardPage> {
             // 3. Product Grid (Asymmetric & Horizontal)
             if (productState.status == ProductStatus.loading ||
                 productState.status == ProductStatus.initial)
-              const SliverFillRemaining(
+              SliverFillRemaining(
                 child: Center(
-                  child: CircularProgressIndicator(color: AppColors.secondary),
+                  child: CircularProgressIndicator(
+                    color: colorScheme.secondary,
+                  ),
                 ),
               )
             else if (productState.status == ProductStatus.error)
@@ -292,16 +295,16 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.error_outline,
                         size: 48,
-                        color: AppColors.onSurfaceVariant,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(height: 16),
                       Text(
                         productState.error ?? 'Gagal memuat koleksi terbaru.',
                         style: GoogleFonts.manrope(
-                          color: AppColors.onSurfaceVariant,
+                          color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -309,10 +312,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         onPressed: () =>
                             context.read<ProductProvider>().fetchProducts(),
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.onSurface,
-                          side: const BorderSide(
-                            color: AppColors.outlineVariant,
-                          ),
+                          foregroundColor: colorScheme.onSurface,
+                          side: BorderSide(color: colorScheme.outlineVariant),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,
                           ),
@@ -332,7 +333,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Text(
                     'Koleksi kosong.',
                     style: GoogleFonts.manrope(
-                      color: AppColors.onSurfaceVariant,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -422,7 +423,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         child: Container(
                           width: double.infinity,
-                          color: AppColors.surfaceContainerHigh,
+                          color: colorScheme.surfaceContainerHigh,
                           padding: const EdgeInsets.symmetric(
                             vertical: 48,
                             horizontal: 32,
@@ -443,17 +444,17 @@ class _DashboardPageState extends State<DashboardPage> {
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.manrope(
                                   fontSize: 14,
-                                  color: AppColors.onSurfaceVariant,
+                                  color: colorScheme.onSurfaceVariant,
                                   height: 1.5,
                                 ),
                               ),
                               const SizedBox(height: 32),
                               Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
-                                      AppColors.secondary,
-                                      AppColors.secondaryDim,
+                                      colorScheme.secondary,
+                                      colorScheme.primary,
                                     ],
                                   ),
                                 ),
@@ -469,7 +470,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       child: Text(
                                         'JOIN THE ATELIER',
                                         style: GoogleFonts.manrope(
-                                          color: AppColors.surface,
+                                          color: colorScheme.surface,
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 2.0,
@@ -522,25 +523,43 @@ class _DashboardPageState extends State<DashboardPage> {
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             height: 90,
-            color: AppColors.surface.withOpacity(0.75),
+            color: colorScheme.surface.withValues(alpha: 0.75),
             padding: const EdgeInsets.only(bottom: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(Icons.auto_awesome, 'Discover', true, () {}),
-                _buildNavItem(Icons.search, 'Search', false, () {}),
-                _buildNavItem(Icons.shopping_bag_outlined, 'Bag', false, () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CartPage()),
-                  );
-                }),
-                _buildNavItem(Icons.person_outline, 'Profile', false, () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ProfilePage()),
-                  );
-                }),
+                _buildNavItem(
+                  context,
+                  Icons.auto_awesome,
+                  'Discover',
+                  true,
+                  () {},
+                ),
+                _buildNavItem(context, Icons.search, 'Search', false, () {}),
+                _buildNavItem(
+                  context,
+                  Icons.shopping_bag_outlined,
+                  'Bag',
+                  false,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const CartPage()),
+                    );
+                  },
+                ),
+                _buildNavItem(
+                  context,
+                  Icons.person_outline,
+                  'Profile',
+                  false,
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ProfilePage()),
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -550,14 +569,16 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildNavItem(
+    BuildContext context,
     IconData icon,
     String label,
     bool isActive,
     VoidCallback onTap,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
     final color = isActive
-        ? AppColors.secondary
-        : AppColors.onSurface.withOpacity(0.6);
+        ? colorScheme.secondary
+        : colorScheme.onSurface.withValues(alpha: 0.6);
     return GestureDetector(
       onTap: onTap,
       child: Column(

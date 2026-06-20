@@ -1,4 +1,4 @@
-import 'package:fashion_app/core/constants/app_colors.dart';
+import 'package:fashion_app/core/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,15 +11,17 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authState = context.watch<AuthProvider>();
+    final themeProvider = context.watch<ThemeProvider>();
+    final colorScheme = Theme.of(context).colorScheme;
     
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.surface.withOpacity(0.9),
+        backgroundColor: colorScheme.surface.withValues(alpha: 0.9),
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
+          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -28,7 +30,7 @@ class ProfilePage extends StatelessWidget {
             fontSize: 20,
             fontWeight: FontWeight.bold,
             letterSpacing: -0.5,
-            color: AppColors.onSurface,
+            color: colorScheme.onSurface,
           ),
         ),
       ),
@@ -36,10 +38,14 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 50,
-              backgroundColor: AppColors.surfaceContainerHigh,
-              child: Icon(Icons.person, size: 50, color: AppColors.onSurfaceVariant),
+              backgroundColor: colorScheme.surfaceContainerHigh,
+              child: Icon(
+                Icons.person,
+                size: 50,
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 24),
             Text(
@@ -47,13 +53,54 @@ class ProfilePage extends StatelessWidget {
               style: GoogleFonts.notoSerif(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: AppColors.onSurface,
+                color: colorScheme.onSurface,
               ),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 32),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.4),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    themeProvider.isDark
+                        ? Icons.dark_mode
+                        : Icons.light_mode,
+                    color: themeProvider.isDark
+                        ? Colors.amber
+                        : colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      themeProvider.isDark ? 'Mode Gelap' : 'Mode Terang',
+                      style: GoogleFonts.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                  Switch(
+                    value: themeProvider.isDark,
+                    onChanged: (_) =>
+                        context.read<ThemeProvider>().toggle(),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
             Container(
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.outlineVariant.withOpacity(0.3)),
+                border: Border.all(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.4),
+                ),
               ),
               child: Material(
                 color: Colors.transparent,
