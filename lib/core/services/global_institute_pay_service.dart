@@ -24,6 +24,8 @@ class PaymentCallbackData {
     if (value == null || !value.startsWith('INV-')) return null;
     return int.tryParse(value.substring(4));
   }
+
+  bool matchesOrder(int value) => orderId == value;
 }
 
 class GlobalInstitutePayService {

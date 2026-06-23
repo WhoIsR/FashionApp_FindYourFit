@@ -36,6 +36,8 @@ void main() {
       expect(callback.reference, 'INV-10');
       expect(callback.transactionId, 'TXN25');
       expect(callback.orderId, 10);
+      expect(callback.matchesOrder(10), isTrue);
+      expect(callback.matchesOrder(11), isFalse);
     });
 
     test('menolak URI yang bukan callback FindYourFit', () {
