@@ -1,6 +1,7 @@
 import 'package:fashion_app/core/routes/app_router.dart';
 import 'package:fashion_app/core/providers/biometric_lock_provider.dart';
 import 'package:fashion_app/core/providers/theme_provider.dart';
+import 'package:fashion_app/core/services/global_institute_pay_service.dart';
 import 'package:fashion_app/core/theme/app_theme.dart';
 import 'package:fashion_app/core/widgets/biometric_lock_screen.dart';
 import 'package:fashion_app/features/auth/presentation/providers/auth_provider.dart';
@@ -18,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Menghidupkan Firebase sebelum aplikasi menggambar tampilan (runApp)
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await GlobalInstitutePayService.instance.init();
 
   runApp(
     MultiProvider(
