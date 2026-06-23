@@ -1,4 +1,5 @@
 import 'package:fashion_app/core/routes/app_router.dart';
+import 'package:fashion_app/core/services/global_institute_pay_service.dart';
 import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:fashion_app/features/order/presentation/providers/order_provider.dart';
 import 'package:flutter/material.dart';
@@ -127,6 +128,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
               groupValue: _paymentMethod,
               title: 'GoPay',
               icon: Icons.account_balance_wallet,
+              onChanged: (value) => setState(() => _paymentMethod = value),
+            ),
+            _PaymentOption(
+              value: GlobalInstitutePayService.paymentMethod,
+              groupValue: _paymentMethod,
+              title: 'Dompet Kampus Global',
+              icon: Icons.account_balance_wallet_outlined,
               onChanged: (value) => setState(() => _paymentMethod = value),
             ),
             const SizedBox(height: 32),
