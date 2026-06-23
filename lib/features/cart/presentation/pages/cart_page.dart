@@ -66,211 +66,216 @@ class _CartPageState extends State<CartPage> {
           message: cartState.error ?? 'Gagal memuat cart',
           onRetry: () => context.read<CartProvider>().fetchCart(),
         ),
-        CartStatus.loaded => cartState.items.isEmpty
-            ? const _EmptyCart()
-            : Column(
-                children: [
-                  Expanded(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.all(24),
-                      itemCount: cartState.items.length,
-                      separatorBuilder: (_, __) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 24),
-                        child: Divider(color: colorScheme.surfaceContainerHigh),
-                      ),
-                      itemBuilder: (context, index) {
-                        final item = cartState.items[index];
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 120,
-                              color: colorScheme.surfaceContainer,
-                              child: Image.network(
-                                item.product.imageUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Icon(
-                                  Icons.broken_image_outlined,
-                                  color: colorScheme.onSurfaceVariant,
+        CartStatus.loaded =>
+          cartState.items.isEmpty
+              ? const _EmptyCart()
+              : Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        padding: const EdgeInsets.all(24),
+                        itemCount: cartState.items.length,
+                        separatorBuilder: (_, __) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Divider(
+                            color: colorScheme.surfaceContainerHigh,
+                          ),
+                        ),
+                        itemBuilder: (context, index) {
+                          final item = cartState.items[index];
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 120,
+                                color: colorScheme.surfaceContainer,
+                                child: Image.network(
+                                  item.product.imageUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Icon(
+                                    Icons.broken_image_outlined,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item.product.name.toUpperCase(),
-                                    style: GoogleFonts.notoSerif(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: -0.5,
-                                      color: colorScheme.onSurface,
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.product.name.toUpperCase(),
+                                      style: GoogleFonts.notoSerif(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: -0.5,
+                                        color: colorScheme.onSurface,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    item.product.category.toUpperCase(),
-                                    style: GoogleFonts.manrope(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1.5,
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      item.product.category.toUpperCase(),
+                                      style: GoogleFonts.manrope(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 1.5,
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      _formatPrice(item.subtotal),
+                                      style: GoogleFonts.manrope(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: colorScheme.secondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () => context
+                                        .read<CartProvider>()
+                                        .removeItem(item.id),
+                                    icon: Icon(
+                                      Icons.close,
+                                      size: 20,
                                       color: colorScheme.onSurfaceVariant,
                                     ),
+                                    constraints: const BoxConstraints(),
+                                    padding: EdgeInsets.zero,
                                   ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    _formatPrice(item.subtotal),
-                                    style: GoogleFonts.manrope(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: colorScheme.secondary,
+                                  const SizedBox(height: 24),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: colorScheme.outlineVariant,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        InkWell(
+                                          onTap: item.quantity <= 1
+                                              ? () => context
+                                                    .read<CartProvider>()
+                                                    .removeItem(item.id)
+                                              : () => context
+                                                    .read<CartProvider>()
+                                                    .updateItem(
+                                                      item.id,
+                                                      item.quantity - 1,
+                                                    ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            child: Icon(Icons.remove, size: 16),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${item.quantity}',
+                                          style: GoogleFonts.manrope(
+                                            fontWeight: FontWeight.bold,
+                                            color: colorScheme.onSurface,
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () => context
+                                              .read<CartProvider>()
+                                              .updateItem(
+                                                item.id,
+                                                item.quantity + 1,
+                                              ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
+                                            child: Icon(Icons.add, size: 16),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  onPressed: () => context
-                                      .read<CartProvider>()
-                                      .removeItem(item.id),
-                                  icon: Icon(
-                                    Icons.close,
-                                    size: 20,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                  constraints: const BoxConstraints(),
-                                  padding: EdgeInsets.zero,
-                                ),
-                                const SizedBox(height: 24),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: colorScheme.outlineVariant,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: item.quantity <= 1
-                                            ? () => context
-                                                  .read<CartProvider>()
-                                                  .removeItem(item.id)
-                                            : () => context
-                                                  .read<CartProvider>()
-                                                  .updateItem(
-                                                    item.id,
-                                                    item.quantity - 1,
-                                                  ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 4,
-                                          ),
-                                          child: Icon(Icons.remove, size: 16),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${item.quantity}',
-                                        style: GoogleFonts.manrope(
-                                          fontWeight: FontWeight.bold,
-                                          color: colorScheme.onSurface,
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () => context
-                                            .read<CartProvider>()
-                                            .updateItem(
-                                              item.id,
-                                              item.quantity + 1,
-                                            ),
-                                        child: const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 4,
-                                          ),
-                                          child: Icon(Icons.add, size: 16),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      border: Border(
-                        top: BorderSide(
-                          color: colorScheme.surfaceContainerHigh,
-                        ),
+                            ],
+                          );
+                        },
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'SUBTOTAL',
-                              style: GoogleFonts.manrope(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 2.0,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                            Text(
-                              _formatPrice(cartState.totalPrice),
-                              style: GoogleFonts.notoSerif(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
+                    Container(
+                      padding: const EdgeInsets.all(32),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        border: Border(
+                          top: BorderSide(
+                            color: colorScheme.surfaceContainerHigh,
+                          ),
                         ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: () =>
-                                Navigator.pushNamed(context, AppRouter.checkout),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: colorScheme.onSurface,
-                              foregroundColor: colorScheme.surface,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'SUBTOTAL',
+                                style: GoogleFonts.manrope(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2.0,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
                               ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              'CHECKOUT',
-                              style: GoogleFonts.manrope(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 2.0,
+                              Text(
+                                _formatPrice(cartState.totalPrice),
+                                style: GoogleFonts.notoSerif(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.onSurface,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: ElevatedButton(
+                              onPressed: () => Navigator.pushNamed(
+                                context,
+                                AppRouter.checkout,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorScheme.onSurface,
+                                foregroundColor: colorScheme.surface,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'CHECKOUT',
+                                style: GoogleFonts.manrope(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2.0,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
       },
     );
   }
@@ -307,7 +312,9 @@ class _EmptyCart extends StatelessWidget {
               foregroundColor: colorScheme.onSurface,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               side: BorderSide(color: colorScheme.outlineVariant),
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
             ),
             child: Text(
               'CONTINUE SHOPPING',
@@ -351,10 +358,7 @@ class _CartError extends StatelessWidget {
               style: GoogleFonts.manrope(color: colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 24),
-            OutlinedButton(
-              onPressed: onRetry,
-              child: const Text('COBA LAGI'),
-            ),
+            OutlinedButton(onPressed: onRetry, child: const Text('COBA LAGI')),
           ],
         ),
       ),

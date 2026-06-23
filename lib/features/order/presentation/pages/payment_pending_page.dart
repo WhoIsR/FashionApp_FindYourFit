@@ -80,7 +80,8 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
           else
             const _InfoBox(
               title: 'Instruksi GoPay',
-              value: 'Buka aplikasi GoPay lalu konfirmasi pembayaran order ini.',
+              value:
+                  'Buka aplikasi GoPay lalu konfirmasi pembayaran order ini.',
             ),
           const SizedBox(height: 24),
           ElevatedButton.icon(

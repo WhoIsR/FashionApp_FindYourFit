@@ -14,7 +14,7 @@ class CartProvider extends ChangeNotifier {
   bool _isAdding = false;
 
   CartProvider({CartRepository? repository})
-      : _repository = repository ?? CartRepositoryImpl();
+    : _repository = repository ?? CartRepositoryImpl();
 
   CartStatus get status => _status;
   CartModel? get cart => _cart;

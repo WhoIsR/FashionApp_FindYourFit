@@ -19,7 +19,7 @@ class OrderProvider extends ChangeNotifier {
   String? _error;
 
   OrderProvider({OrderRepository? repository})
-      : _repository = repository ?? OrderRepositoryImpl();
+    : _repository = repository ?? OrderRepositoryImpl();
 
   OrderStatus get checkoutStatus => _checkoutStatus;
   OrderStatus get ordersStatus => _ordersStatus;
@@ -76,7 +76,8 @@ class OrderProvider extends ChangeNotifier {
 
     try {
       _lastOrder = await _repository.getOrderDetail(orderId);
-      _payStatus = _lastOrder?.status == 'paid' ||
+      _payStatus =
+          _lastOrder?.status == 'paid' ||
               _lastOrder?.status == 'processing' ||
               _lastOrder?.status == 'delivered'
           ? PaymentCheckStatus.paid

@@ -75,10 +75,6 @@ class CartModel {
     final total = items.fold<double>(0.0, (sum, item) => sum + item.subtotal);
     final itemCount = items.fold<int>(0, (sum, item) => sum + item.quantity);
 
-    return CartModel(
-      items: items,
-      total: total,
-      itemCount: itemCount,
-    );
+    return CartModel(items: items, total: total, itemCount: itemCount);
   }
 }

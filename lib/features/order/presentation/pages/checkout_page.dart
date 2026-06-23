@@ -66,9 +66,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Checkout'),
-      ),
+      appBar: AppBar(title: const Text('Checkout')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -207,7 +205,9 @@ class _PaymentOption extends StatelessWidget {
               ? colorScheme.secondary.withValues(alpha: 0.08)
               : colorScheme.surface,
           border: Border.all(
-            color: selected ? colorScheme.secondary : colorScheme.outlineVariant,
+            color: selected
+                ? colorScheme.secondary
+                : colorScheme.outlineVariant,
           ),
         ),
         child: Row(

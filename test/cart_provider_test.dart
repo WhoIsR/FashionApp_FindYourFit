@@ -9,10 +9,7 @@ class FakeCartRepository implements CartRepository {
   int addedProductId = 0;
   int addedQuantity = 0;
 
-  FakeCartRepository({
-    required this.cart,
-    this.shouldThrow = false,
-  });
+  FakeCartRepository({required this.cart, this.shouldThrow = false});
 
   @override
   Future<CartModel> getCart() async {

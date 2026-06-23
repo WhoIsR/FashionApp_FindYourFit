@@ -22,7 +22,11 @@ class OrderSuccessPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.check_circle_outline, size: 80, color: colorScheme.secondary),
+              Icon(
+                Icons.check_circle_outline,
+                size: 80,
+                color: colorScheme.secondary,
+              ),
               const SizedBox(height: 24),
               Text(
                 'ORDER CONFIRMED',

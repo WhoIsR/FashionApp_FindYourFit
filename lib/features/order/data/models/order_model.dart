@@ -55,7 +55,8 @@ class OrderModel {
 
     return OrderModel(
       id: json['id'] as int? ?? 0,
-      totalAmount: (json['total_amount'] as num?)?.toDouble() ??
+      totalAmount:
+          (json['total_amount'] as num?)?.toDouble() ??
           (json['total'] as num?)?.toDouble() ??
           0.0,
       status: json['status'] as String? ?? 'pending',
