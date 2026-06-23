@@ -42,6 +42,7 @@ class GlobalInstitutePayService {
 
   static const String merchantId = 'MCH_FINDYOURFIT';
   static const String merchantName = 'FindYourFit';
+  static const String paymentMethod = 'global_institute_pay';
   static const String callbackUrl = 'findyourfit://payment-callback';
 
   Stream<PaymentCallbackData> get callbackStream => _callbackController.stream;

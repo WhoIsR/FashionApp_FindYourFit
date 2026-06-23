@@ -3,6 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('GlobalInstitutePayService', () {
+    test('menggunakan kode metode pembayaran dari materi', () {
+      expect(GlobalInstitutePayService.paymentMethod, 'global_institute_pay');
+    });
+
     test('membentuk deeplink pembayaran untuk Dompet Kampus', () {
       final uri = GlobalInstitutePayService.buildPaymentUri(
         orderId: 10,
