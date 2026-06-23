@@ -50,15 +50,18 @@ class _LoginPageState extends State<LoginPage> {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      debugPrint('[Auth] Firebase sign-in OK → uid=${userCredential.user?.uid}');
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      debugPrint(
+          '[Auth] Firebase sign-in OK → uid=${userCredential.user?.uid}');
 
       final idToken = await userCredential.user?.getIdToken();
       debugPrint(
           '[Auth] Firebase ID token: ${idToken != null ? "OK (${idToken.length} chars)" : "NULL"}');
 
       if (idToken != null && mounted) {
-        debugPrint('[Auth] Kirim token ke backend → POST /v1/auth/verify-token');
+        debugPrint(
+            '[Auth] Kirim token ke backend → POST /v1/auth/verify-token');
         context.read<AuthBloc>().add(AuthLoginWithFirebase(idToken));
       }
     } catch (e, st) {
@@ -75,7 +78,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _loginWithEmail() async {
     try {
-      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _email,
         password: _pw,
       );
@@ -102,7 +106,8 @@ class _LoginPageState extends State<LoginPage> {
           context.go('/home');
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: AppColors.red),
+            SnackBar(
+                content: Text(state.message), backgroundColor: AppColors.red),
           );
         }
       },
@@ -136,7 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                           )),
                       const SizedBox(height: 6),
                       const Text('Selamat datang kembali',
-                          style: TextStyle(fontSize: 14.5, color: AppColors.slate500)),
+                          style: TextStyle(
+                              fontSize: 14.5, color: AppColors.slate500)),
                       const SizedBox(height: 24),
                       // Google sign in
                       BlocBuilder<AuthBloc, AuthState>(
@@ -149,7 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: AppColors.line, width: 1.5),
+                                border: Border.all(
+                                    color: AppColors.line, width: 1.5),
                                 boxShadow: AppColors.shadowSoft,
                               ),
                               child: Row(
@@ -161,7 +168,8 @@ class _LoginPageState extends State<LoginPage> {
                                           height: 20,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2.4,
-                                            valueColor: AlwaysStoppedAnimation(AppColors.primary),
+                                            valueColor: AlwaysStoppedAnimation(
+                                                AppColors.primary),
                                           ),
                                         ),
                                         SizedBox(width: 11),
@@ -252,7 +260,8 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Belum punya akun? ',
-                              style: TextStyle(fontSize: 14, color: AppColors.slate500)),
+                              style: TextStyle(
+                                  fontSize: 14, color: AppColors.slate500)),
                           GestureDetector(
                             onTap: () => context.go('/register'),
                             child: const Text('Daftar',

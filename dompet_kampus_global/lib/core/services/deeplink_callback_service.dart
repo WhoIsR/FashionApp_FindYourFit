@@ -37,7 +37,8 @@ class DeeplinkCallbackService {
     await _launch(callbackUrl, {
       'status': 'failed',
       if (reference != null && reference.isNotEmpty) 'reference': reference,
-      if (errorMessage != null && errorMessage.isNotEmpty) 'error': errorMessage,
+      if (errorMessage != null && errorMessage.isNotEmpty)
+        'error': errorMessage,
     });
   }
 
@@ -71,7 +72,8 @@ class DeeplinkCallbackService {
       debugPrint('[DeeplinkCallback] Callback terkirim.');
     } catch (e) {
       // Callback gagal tidak boleh mengganggu alur payment
-      debugPrint('[DeeplinkCallback] App merchant tidak tersedia atau URI tidak valid: $e');
+      debugPrint(
+          '[DeeplinkCallback] App merchant tidak tersedia atau URI tidak valid: $e');
     }
   }
 }

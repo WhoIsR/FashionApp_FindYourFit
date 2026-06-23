@@ -40,13 +40,17 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: AppColors.bg,
           body: BlocBuilder<AccountBloc, AccountState>(
             builder: (context, accountState) {
-              final balance = accountState is AccountLoaded ? accountState.account.balance : 0.0;
-              final txns =
-                  accountState is AccountLoaded ? accountState.transactions : <TransactionEntity>[];
+              final balance = accountState is AccountLoaded
+                  ? accountState.account.balance
+                  : 0.0;
+              final txns = accountState is AccountLoaded
+                  ? accountState.transactions
+                  : <TransactionEntity>[];
               final loading = accountState is AccountLoading;
 
               return RefreshIndicator(
-                onRefresh: () async => context.read<AccountBloc>().add(AccountRefreshRequested()),
+                onRefresh: () async =>
+                    context.read<AccountBloc>().add(AccountRefreshRequested()),
                 color: AppColors.primary,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -62,8 +66,8 @@ class _HomePageState extends State<HomePage> {
                             bottomRight: Radius.circular(28),
                           ),
                         ),
-                        padding: EdgeInsets.fromLTRB(
-                            20, MediaQuery.of(context).padding.top + 12, 20, 94),
+                        padding: EdgeInsets.fromLTRB(20,
+                            MediaQuery.of(context).padding.top + 12, 20, 94),
                         child: Row(
                           children: [
                             AppAvatar(
@@ -101,8 +105,10 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.white.withValues(alpha: 0.18),
                                     borderRadius: BorderRadius.circular(14),
                                   ),
-                                  child: const Icon(Icons.notifications_outlined,
-                                      size: 21, color: Colors.white),
+                                  child: const Icon(
+                                      Icons.notifications_outlined,
+                                      size: 21,
+                                      color: Colors.white),
                                 ),
                                 Positioned(
                                   top: 10,
@@ -113,7 +119,8 @@ class _HomePageState extends State<HomePage> {
                                     decoration: BoxDecoration(
                                       color: AppColors.amber,
                                       shape: BoxShape.circle,
-                                      border: Border.all(color: Colors.white, width: 2),
+                                      border: Border.all(
+                                          color: Colors.white, width: 2),
                                     ),
                                   ),
                                 ),
@@ -164,10 +171,30 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBalanceCard(double balance, bool loading) {
     final actions = [
-      {'icon': Icons.north_rounded, 'label': 'Top Up', 'tone': 'blue', 'route': '/topup'},
-      {'icon': Icons.send_rounded, 'label': 'Transfer', 'tone': 'green', 'route': '/transfer'},
-      {'icon': Icons.qr_code_rounded, 'label': 'Bayar', 'tone': 'violet', 'route': '/payment'},
-      {'icon': Icons.south_rounded, 'label': 'Tarik', 'tone': 'amber', 'route': '/topup'},
+      {
+        'icon': Icons.north_rounded,
+        'label': 'Top Up',
+        'tone': 'blue',
+        'route': '/topup'
+      },
+      {
+        'icon': Icons.send_rounded,
+        'label': 'Transfer',
+        'tone': 'green',
+        'route': '/transfer'
+      },
+      {
+        'icon': Icons.qr_code_rounded,
+        'label': 'Bayar',
+        'tone': 'violet',
+        'route': '/payment'
+      },
+      {
+        'icon': Icons.south_rounded,
+        'label': 'Tarik',
+        'tone': 'amber',
+        'route': '/topup'
+      },
     ];
 
     return Container(
@@ -198,14 +225,16 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () => context.go('/topup'),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.primarySurface,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.add_rounded, size: 15, color: AppColors.primary),
+                      Icon(Icons.add_rounded,
+                          size: 15, color: AppColors.primary),
                       SizedBox(width: 5),
                       Text('Isi Saldo',
                           style: TextStyle(
@@ -224,7 +253,9 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               Text(
-                _hideBalance ? CurrencyFormatter.maskBalance() : CurrencyFormatter.format(balance),
+                _hideBalance
+                    ? CurrencyFormatter.maskBalance()
+                    : CurrencyFormatter.format(balance),
                 style: const TextStyle(
                   fontFamily: 'PlusJakartaSans',
                   fontSize: 30,
@@ -235,8 +266,12 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(width: 10),
               IconButton(
-                icon: Icon(_hideBalance ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    size: 20, color: AppColors.slate400),
+                icon: Icon(
+                    _hideBalance
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                    size: 20,
+                    color: AppColors.slate400),
                 onPressed: () => setState(() => _hideBalance = !_hideBalance),
                 padding: const EdgeInsets.all(4),
                 constraints: const BoxConstraints(),
@@ -298,7 +333,10 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 const FeatureIcon(
-                    icon: Icons.star_outline_rounded, tone: 'amber', size: 38, iconSize: 19),
+                    icon: Icons.star_outline_rounded,
+                    tone: 'amber',
+                    size: 38,
+                    iconSize: 19),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,7 +371,10 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 const FeatureIcon(
-                    icon: Icons.qr_code_rounded, tone: 'green', size: 38, iconSize: 19),
+                    icon: Icons.qr_code_rounded,
+                    tone: 'green',
+                    size: 38,
+                    iconSize: 19),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,7 +409,11 @@ class _HomePageState extends State<HomePage> {
       {'icon': Icons.receipt_long_outlined, 'label': 'UKT', 'tone': 'violet'},
       {'icon': Icons.wifi_rounded, 'label': 'Paket Data', 'tone': 'green'},
       {'icon': Icons.card_giftcard_rounded, 'label': 'Voucher', 'tone': 'red'},
-      {'icon': Icons.favorite_outline_rounded, 'label': 'Donasi', 'tone': 'amber'},
+      {
+        'icon': Icons.favorite_outline_rounded,
+        'label': 'Donasi',
+        'tone': 'amber'
+      },
       {'icon': Icons.more_horiz_rounded, 'label': 'Lainnya', 'tone': 'slate'},
     ];
     return Container(
@@ -391,7 +436,10 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FeatureIcon(
-                    icon: f['icon'] as IconData, tone: f['tone'] as String, size: 50, iconSize: 24),
+                    icon: f['icon'] as IconData,
+                    tone: f['tone'] as String,
+                    size: 50,
+                    iconSize: 24),
                 const SizedBox(height: 8),
                 Text(f['label'] as String,
                     style: const TextStyle(
@@ -445,7 +493,8 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.white.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(Icons.link_rounded, size: 24, color: Color(0xFF5B9BFF)),
+                  child: const Icon(Icons.link_rounded,
+                      size: 24, color: Color(0xFF5B9BFF)),
                 ),
                 const SizedBox(width: 13),
                 const Expanded(
@@ -469,7 +518,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right_rounded, size: 20, color: Colors.white60),
+                const Icon(Icons.chevron_right_rounded,
+                    size: 20, color: Colors.white60),
               ],
             ),
           ],
@@ -515,7 +565,9 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.all(20),
                   child: Center(
                     child: Text('Belum ada transaksi',
-                        style: TextStyle(color: AppColors.slate400, fontFamily: 'PlusJakartaSans')),
+                        style: TextStyle(
+                            color: AppColors.slate400,
+                            fontFamily: 'PlusJakartaSans')),
                   ),
                 )
               : Column(
@@ -524,7 +576,8 @@ class _HomePageState extends State<HomePage> {
                       .toList()
                       .asMap()
                       .entries
-                      .map((e) => TransactionRow(txn: e.value, divider: e.key > 0))
+                      .map((e) =>
+                          TransactionRow(txn: e.value, divider: e.key > 0))
                       .toList(),
                 ),
         ),
