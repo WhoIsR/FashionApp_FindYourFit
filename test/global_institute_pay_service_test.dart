@@ -42,5 +42,23 @@ void main() {
         throwsA(isA<FormatException>()),
       );
     });
+
+    test('menyimpan callback masuk sampai halaman pembayaran mengambilnya', () {
+      final service = GlobalInstitutePayService();
+
+      service.processCallbackUri(
+        Uri.parse(
+          'findyourfit://payment-callback'
+          '?status=success'
+          '&reference=INV-11',
+        ),
+      );
+
+      final callback = service.consumePendingCallback();
+
+      expect(callback?.status, PaymentCallbackStatus.success);
+      expect(callback?.orderId, 11);
+      expect(service.consumePendingCallback(), isNull);
+    });
   });
 }

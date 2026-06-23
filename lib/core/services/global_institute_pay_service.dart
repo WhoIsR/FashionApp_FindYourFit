@@ -1,3 +1,9 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 enum PaymentCallbackStatus { success, failed, cancelled }
 
 class PaymentCallbackData {
@@ -21,9 +27,70 @@ class PaymentCallbackData {
 }
 
 class GlobalInstitutePayService {
+  final AppLinks _appLinks;
+  final StreamController<PaymentCallbackData> _callbackController =
+      StreamController<PaymentCallbackData>.broadcast();
+
+  StreamSubscription<Uri>? _linkSubscription;
+  PaymentCallbackData? _pendingCallback;
+  bool _initialized = false;
+
+  GlobalInstitutePayService({AppLinks? appLinks})
+    : _appLinks = appLinks ?? AppLinks();
+
+  static final GlobalInstitutePayService instance = GlobalInstitutePayService();
+
   static const String merchantId = 'MCH_FINDYOURFIT';
   static const String merchantName = 'FindYourFit';
   static const String callbackUrl = 'findyourfit://payment-callback';
+
+  Stream<PaymentCallbackData> get callbackStream => _callbackController.stream;
+
+  Future<void> init() async {
+    if (_initialized) return;
+    _initialized = true;
+
+    try {
+      final initialUri = await _appLinks.getInitialLink();
+      if (initialUri != null) {
+        processCallbackUri(initialUri);
+      }
+    } catch (e) {
+      debugPrint('[GlobalInstitutePay] initial link error: $e');
+    }
+
+    _linkSubscription = _appLinks.uriLinkStream.listen(
+      (uri) {
+        try {
+          processCallbackUri(uri);
+        } catch (e) {
+          debugPrint('[GlobalInstitutePay] callback diabaikan: $e');
+        }
+      },
+      onError: (Object error) {
+        debugPrint('[GlobalInstitutePay] stream error: $error');
+      },
+    );
+  }
+
+  void processCallbackUri(Uri uri) {
+    final callback = parseCallbackUri(uri);
+    _pendingCallback = callback;
+    _callbackController.add(callback);
+  }
+
+  PaymentCallbackData? consumePendingCallback() {
+    final callback = _pendingCallback;
+    _pendingCallback = null;
+    return callback;
+  }
+
+  Future<bool> openPaymentApp({required int orderId, required double amount}) {
+    return launchUrl(
+      buildPaymentUri(orderId: orderId, amount: amount),
+      mode: LaunchMode.externalNonBrowserApplication,
+    );
+  }
 
   static Uri buildPaymentUri({required int orderId, required double amount}) {
     return Uri(
@@ -58,5 +125,10 @@ class GlobalInstitutePayService {
       transactionId: uri.queryParameters['transaction_id'],
       error: uri.queryParameters['error'],
     );
+  }
+
+  Future<void> dispose() async {
+    await _linkSubscription?.cancel();
+    await _callbackController.close();
   }
 }
