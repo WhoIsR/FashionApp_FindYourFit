@@ -64,11 +64,12 @@ class _TwoFATotpPageState extends State<TwoFATotpPage> {
         } else if (state is OtpInvalid) {
           setState(() => _hasError = true);
           Future.delayed(const Duration(milliseconds: 650), () {
-            if (mounted)
+            if (mounted) {
               setState(() {
                 _code = '';
                 _hasError = false;
               });
+            }
           });
         } else if (state is OtpError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -275,7 +276,7 @@ class _TwoFATotpPageState extends State<TwoFATotpPage> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 80),
             transform: _hasError
-                ? (Matrix4.identity()..translate(8.0))
+                ? (Matrix4.identity()..translateByDouble(8.0, 0, 0, 1))
                 : Matrix4.identity(),
             child: CodeInput(
                 value: _code, onChanged: _onCodeChanged, hasError: _hasError),

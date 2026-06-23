@@ -72,11 +72,12 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             isInvalidOtp ? 'Kode salah atau sudah kadaluarsa' : e.message;
       });
       Future.delayed(const Duration(milliseconds: 650), () {
-        if (mounted)
+        if (mounted) {
           setState(() {
             _code = '';
             _hasError = false;
           });
+        }
       });
     } catch (_) {
       setState(() {
@@ -84,11 +85,12 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         _errorMessage = 'Terjadi kesalahan, coba lagi';
       });
       Future.delayed(const Duration(milliseconds: 650), () {
-        if (mounted)
+        if (mounted) {
           setState(() {
             _code = '';
             _hasError = false;
           });
+        }
       });
     } finally {
       if (mounted) setState(() => _loading = false);

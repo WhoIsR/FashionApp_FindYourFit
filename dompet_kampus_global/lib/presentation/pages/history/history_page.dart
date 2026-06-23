@@ -96,10 +96,12 @@ class _HistoryPageState extends State<HistoryPage> {
                 }
                 if (state is AccountLoaded) {
                   List<TransactionEntity> txns = state.transactions;
-                  if (_tab == 'in')
+                  if (_tab == 'in') {
                     txns = txns.where((t) => t.isCredit).toList();
-                  if (_tab == 'out')
+                  }
+                  if (_tab == 'out') {
                     txns = txns.where((t) => !t.isCredit).toList();
+                  }
 
                   if (txns.isEmpty) {
                     return const Center(

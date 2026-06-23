@@ -29,7 +29,8 @@ class _TwoFANotifPageState extends State<TwoFANotifPage> {
         if (state is OtpVerified) {
           setState(() => _phase = 'approved');
           Future.delayed(const Duration(milliseconds: 900), () {
-            if (mounted) context.go('/home');
+            if (!context.mounted) return;
+            context.go('/home');
           });
         } else if (state is OtpError) {
           ScaffoldMessenger.of(context).showSnackBar(
