@@ -93,6 +93,12 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
+            _ProfileAction(
+              label: 'MY ORDERS',
+              icon: Icons.receipt_long,
+              onTap: () => Navigator.pushNamed(context, AppRouter.myOrders),
+            ),
+            const SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
@@ -131,6 +137,56 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileAction extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _ProfileAction({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.4),
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 18, color: colorScheme.onSurface),
+                const SizedBox(width: 10),
+                Text(
+                  label,
+                  style: GoogleFonts.manrope(
+                    color: colorScheme.onSurface,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
