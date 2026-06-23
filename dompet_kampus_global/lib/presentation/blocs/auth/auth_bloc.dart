@@ -5,6 +5,7 @@ import '../../../domain/usecases/auth/verify_firebase_token_usecase.dart';
 import '../../../domain/usecases/auth/logout_usecase.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../../core/error/failures.dart';
+import '../../../core/services/notification_service.dart';
 
 // Events
 abstract class AuthEvent extends Equatable {
@@ -107,6 +108,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthUnauthenticated());
       return;
     }
+    await NotificationService.instance.syncToken(_authRepo);
     emit(AuthAuthenticated(user));
   }
 
