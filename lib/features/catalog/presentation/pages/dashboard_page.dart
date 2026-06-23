@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:fashion_app/core/routes/app_router.dart';
 import 'package:fashion_app/core/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import 'package:fashion_app/features/auth/presentation/pages/profile_page.dart';
 import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
-import 'package:fashion_app/features/cart/presentation/pages/cart_page.dart';
 import '../../data/models/product_model.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -30,21 +30,28 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductProvider>().fetchProducts();
+      context.read<CartProvider>().fetchCart();
     });
   }
 
-  void _addToCart(BuildContext context, ProductModel product) {
-    context.read<CartProvider>().addToCart(product);
+  Future<void> _addToCart(BuildContext context, ProductModel product) async {
+    final ok = await context.read<CartProvider>().addToCart(product.id, 1);
+    if (!context.mounted) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          '${product.name.toUpperCase()} added to bag',
+          ok
+              ? '${product.name.toUpperCase()} added to bag'
+              : context.read<CartProvider>().error ?? 'Gagal menambahkan item',
           style: GoogleFonts.manrope(
             color: Theme.of(context).colorScheme.surface,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Theme.of(context).colorScheme.onSurface,
+        backgroundColor: ok
+            ? Theme.of(context).colorScheme.onSurface
+            : Colors.redAccent,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
       ),
@@ -92,10 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: colorScheme.onSurface,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const CartPage()),
-                        );
+                        Navigator.pushNamed(context, AppRouter.cart);
                       },
                     ),
                     Positioned(
@@ -542,10 +546,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   'Bag',
                   false,
                   () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const CartPage()),
-                    );
+                    Navigator.pushNamed(context, AppRouter.cart);
                   },
                 ),
                 _buildNavItem(
