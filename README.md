@@ -265,7 +265,10 @@ dan perekaman selesai.
 
 ## Identitas
 
-**Radja Satrio Seftiano**  
-**NIM 1123150172**  
-Teknik Informatika - Semester 6  
+**Radja Satrio Seftiano**
+
+**NIM 1123150172**
+
+Teknik Informatika - Semester 6
+
 Institut Teknologi dan Bisnis Bina Sarana Global
