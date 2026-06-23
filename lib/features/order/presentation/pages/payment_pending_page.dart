@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:fashion_app/core/routes/app_router.dart';
+import 'package:fashion_app/core/services/global_institute_pay_service.dart';
 import 'package:fashion_app/features/order/data/models/order_model.dart';
 import 'package:fashion_app/features/order/presentation/providers/order_provider.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,43 @@ class PaymentPendingPage extends StatefulWidget {
 }
 
 class _PaymentPendingPageState extends State<PaymentPendingPage> {
+  StreamSubscription<PaymentCallbackData>? _callbackSubscription;
+  Timer? _statusTimer;
+  bool _openingWallet = false;
+  String? _walletMessage;
+
+  bool get _isGlobalInstitutePay =>
+      widget.order.paymentMethod == GlobalInstitutePayService.paymentMethod;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_isGlobalInstitutePay) {
+      _callbackSubscription = GlobalInstitutePayService.instance.callbackStream
+          .listen(_handleCallback);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final pending = GlobalInstitutePayService.instance
+            .consumePendingCallback();
+        if (pending != null) {
+          _handleCallback(pending);
+        }
+        _openWallet();
+      });
+
+      _statusTimer = Timer.periodic(const Duration(seconds: 5), (_) {
+        _checkStatus();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _callbackSubscription?.cancel();
+    _statusTimer?.cancel();
+    super.dispose();
+  }
+
   String _formatPrice(double value) => 'Rp ${value.toStringAsFixed(0)}';
 
   Future<void> _checkStatus() async {
@@ -23,6 +63,7 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
 
     final provider = context.read<OrderProvider>();
     if (provider.payStatus == PaymentCheckStatus.paid) {
+      _statusTimer?.cancel();
       Navigator.pushNamedAndRemoveUntil(
         context,
         AppRouter.orderSuccess,
@@ -32,12 +73,66 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
     }
   }
 
+  Future<void> _openWallet() async {
+    if (_openingWallet) return;
+    setState(() {
+      _openingWallet = true;
+      _walletMessage = null;
+    });
+
+    try {
+      final opened = await GlobalInstitutePayService.instance.openPaymentApp(
+        orderId: widget.order.id,
+        amount: widget.order.totalAmount,
+      );
+      if (!mounted) return;
+      if (!opened) {
+        setState(() {
+          _walletMessage = 'Aplikasi Dompet Kampus tidak dapat dibuka.';
+        });
+      }
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _walletMessage =
+            'Dompet Kampus belum terpasang atau tidak dapat dibuka.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _openingWallet = false);
+      }
+    }
+  }
+
+  Future<void> _handleCallback(PaymentCallbackData callback) async {
+    if (!callback.matchesOrder(widget.order.id) || !mounted) return;
+
+    switch (callback.status) {
+      case PaymentCallbackStatus.success:
+        setState(() {
+          _walletMessage = 'Pembayaran diterima. Memeriksa status transaksi...';
+        });
+        await _checkStatus();
+      case PaymentCallbackStatus.failed:
+        setState(() {
+          _walletMessage =
+              'Pembayaran gagal${callback.error == null ? '.' : ': ${callback.error}'}';
+        });
+      case PaymentCallbackStatus.cancelled:
+        setState(() {
+          _walletMessage = 'Pembayaran dibatalkan di Dompet Kampus.';
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<OrderProvider>();
     final colorScheme = Theme.of(context).colorScheme;
     final order = provider.lastOrder ?? widget.order;
     final isGopay = order.paymentMethod == 'gopay';
+    final isGlobalInstitutePay =
+        order.paymentMethod == GlobalInstitutePayService.paymentMethod;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -46,13 +141,19 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
         padding: const EdgeInsets.all(24),
         children: [
           Icon(
-            isGopay ? Icons.account_balance_wallet : Icons.credit_card,
+            isGopay || isGlobalInstitutePay
+                ? Icons.account_balance_wallet
+                : Icons.credit_card,
             size: 72,
-            color: isGopay ? const Color(0xFF00ADB5) : colorScheme.secondary,
+            color: isGopay || isGlobalInstitutePay
+                ? const Color(0xFF00ADB5)
+                : colorScheme.secondary,
           ),
           const SizedBox(height: 20),
           Text(
-            isGopay
+            isGlobalInstitutePay
+                ? 'Bayar melalui Dompet Kampus'
+                : isGopay
                 ? 'Selesaikan Pembayaran via GoPay'
                 : 'Selesaikan Pembayaran via Virtual Account',
             textAlign: TextAlign.center,
@@ -72,7 +173,13 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
             ),
           ),
           const SizedBox(height: 28),
-          if (!isGopay)
+          if (isGlobalInstitutePay)
+            const _InfoBox(
+              title: 'Pembayaran App-to-App',
+              value:
+                  'Konfirmasi detail transaksi, masukkan PIN, lalu selesaikan verifikasi 2FA di Dompet Kampus.',
+            )
+          else if (!isGopay)
             _InfoBox(
               title: 'Nomor Virtual Account',
               value: order.vaNumber ?? '-',
@@ -84,6 +191,35 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
                   'Buka aplikasi GoPay lalu konfirmasi pembayaran order ini.',
             ),
           const SizedBox(height: 24),
+          if (isGlobalInstitutePay) ...[
+            ElevatedButton.icon(
+              onPressed: _openingWallet ? null : _openWallet,
+              icon: _openingWallet
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.open_in_new),
+              label: Text(
+                _openingWallet
+                    ? 'Membuka Dompet Kampus...'
+                    : 'Buka Dompet Kampus',
+              ),
+            ),
+            if (_walletMessage != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _walletMessage!,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.manrope(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+          ],
           ElevatedButton.icon(
             onPressed: provider.payStatus == PaymentCheckStatus.checking
                 ? null
