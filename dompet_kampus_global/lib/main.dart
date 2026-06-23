@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/router/app_router.dart';
 import 'core/services/deeplink_service.dart';
+import 'core/services/notification_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_bloc_observer.dart';
 import 'firebase_options.dart';
@@ -25,6 +26,7 @@ void main() async {
 
   // Initialize dependency injection
   await di.init();
+  await NotificationService.instance.init();
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
