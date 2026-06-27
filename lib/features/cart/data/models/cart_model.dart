@@ -15,7 +15,7 @@ class CartProductModel {
 
   factory CartProductModel.fromJson(Map<String, dynamic> json) {
     return CartProductModel(
-      id: json['ID'] as int? ?? json['id'] as int? ?? 0,
+      id: _readInt(json['ID'] ?? json['id']),
       name: json['name'] as String? ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       imageUrl: json['image_url'] as String? ?? '',
@@ -43,18 +43,25 @@ class CartItemModel {
     final product = CartProductModel.fromJson(
       json['product'] as Map<String, dynamic>? ?? {},
     );
-    final quantity = json['quantity'] as int? ?? json['quantit'] as int? ?? 0;
+    final quantity = _readInt(json['quantity'] ?? json['quantit']);
     final apiSubtotal = (json['subtotal'] as num?)?.toDouble() ?? 0.0;
     final subtotal = apiSubtotal > 0 ? apiSubtotal : product.price * quantity;
 
     return CartItemModel(
-      id: json['id'] as int? ?? 0,
-      productId: json['product_id'] as int? ?? product.id,
+      id: _readInt(json['ID'] ?? json['id']),
+      productId: _readInt(json['product_id'], fallback: product.id),
       product: product,
       quantity: quantity,
       subtotal: subtotal,
     );
   }
+}
+
+int _readInt(dynamic value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  if (value is String) return int.tryParse(value) ?? fallback;
+  return fallback;
 }
 
 class CartModel {
