@@ -1,15 +1,11 @@
-# FindYourFit dan Dompet Kampus Global
+# FindYourFit
 
 Proyek Ujian Akhir Semester mata kuliah Aplikasi Mobile Lanjutan. Repository ini
-berisi dua aplikasi Flutter yang saling terhubung:
+berisi aplikasi Flutter **FindYourFit** sebagai E-Commerce atau merchant.
 
-1. **FindYourFit** sebagai aplikasi E-Commerce atau merchant.
-2. **Dompet Kampus Global** sebagai aplikasi E-Money atau wallet.
-
-Pembayaran dilakukan melalui integrasi App-to-App menggunakan Deep Link.
-FindYourFit mengirim detail order ke Dompet Kampus, pengguna melakukan
-verifikasi PIN dan Two-Factor Authentication (2FA), lalu wallet mengirim hasil
-transaksi kembali ke FindYourFit.
+Pembayaran Dompet Kampus Global dibuat sebagai aplikasi wallet terpisah pada
+repository berbeda. FindYourFit tetap terhubung ke wallet tersebut melalui
+integrasi App-to-App menggunakan Deep Link.
 
 ## Fitur Aplikasi
 
@@ -25,18 +21,6 @@ transaksi kembali ke FindYourFit.
 - Penerimaan callback melalui `findyourfit://payment-callback`.
 - Pengecekan status pembayaran melalui Backend API.
 - Dark mode dan pengamanan aplikasi menggunakan biometric.
-
-### Dompet Kampus Global
-
-- Registrasi dan login akun wallet.
-- Menampilkan saldo dan riwayat transaksi.
-- Top up, transfer, dan pembayaran.
-- Menerima detail transaksi dari merchant melalui Deep Link.
-- Menampilkan merchant, nominal, deskripsi, dan nomor referensi.
-- Verifikasi transaksi menggunakan PIN dan 2FA.
-- Mendukung metode 2FA SMTP OTP, TOTP, dan Firebase notification.
-- Mengirim callback transaksi sukses, gagal, atau dibatalkan.
-- Menerima notifikasi transaksi menggunakan Firebase Cloud Messaging.
 
 ## Alur Pembayaran
 
@@ -84,29 +68,6 @@ lib/
     |-- cart/
     |-- catalog/
     `-- order/
-```
-
-### Dompet Kampus Global
-
-Dompet Kampus menggunakan Clean Architecture, BLoC, dependency injection
-GetIt, dan GoRouter.
-
-```text
-dompet_kampus_global/lib/
-|-- core/
-|-- data/
-|   |-- datasources/
-|   |-- models/
-|   `-- repositories/
-|-- domain/
-|   |-- entities/
-|   |-- repositories/
-|   `-- usecases/
-|-- injection/
-`-- presentation/
-    |-- blocs/
-    |-- pages/
-    `-- widgets/
 ```
 
 ## Deep Link
@@ -161,33 +122,12 @@ setelah verifikasi berhasil.
 | `app_links` | Menerima callback Deep Link |
 | `url_launcher` | Membuka aplikasi wallet |
 
-### Dompet Kampus Global
-
-| Dependensi | Kegunaan |
-| --- | --- |
-| `flutter_bloc` | State management |
-| `get_it` | Dependency injection |
-| `go_router` | Navigasi aplikasi |
-| `dio` | Komunikasi REST API |
-| `firebase_auth` | Autentikasi wallet |
-| `firebase_messaging` | Notifikasi dan token FCM |
-| `flutter_secure_storage` | Penyimpanan token dan konfigurasi 2FA |
-| `mobile_scanner` | Pemindaian QR |
-| `app_links` | Menerima Deep Link pembayaran |
-| `url_launcher` | Mengirim callback ke merchant |
-
 ## Konfigurasi Backend
 
 Alamat Backend API FindYourFit terdapat pada:
 
 ```text
 lib/core/constants/api_constants.dart
-```
-
-Alamat Backend API Dompet Kampus terdapat pada:
-
-```text
-dompet_kampus_global/lib/core/constants/app_constants.dart
 ```
 
 Gunakan alamat IP komputer yang dapat diakses perangkat Android. Jangan
@@ -198,14 +138,6 @@ menggunakan `localhost` ketika aplikasi dijalankan pada perangkat fisik.
 ### FindYourFit
 
 ```bash
-flutter pub get
-flutter run
-```
-
-### Dompet Kampus Global
-
-```bash
-cd dompet_kampus_global
 flutter pub get
 flutter run
 ```
@@ -227,28 +159,9 @@ Hasil build:
 build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-### Dompet Kampus Global
-
-```bash
-cd dompet_kampus_global
-flutter build apk --debug
-```
-
-Hasil build:
-
-```text
-dompet_kampus_global/build/app/outputs/flutter-apk/app-debug.apk
-```
-
 ## Pengujian
 
 ```bash
-# FindYourFit
-flutter analyze
-flutter test
-
-# Dompet Kampus Global
-cd dompet_kampus_global
 flutter analyze
 flutter test
 ```
