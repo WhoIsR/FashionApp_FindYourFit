@@ -13,6 +13,9 @@ class CartProvider extends ChangeNotifier {
   String? _error;
   bool _isAdding = false;
 
+  // State cadangan buat rollback kalau sync backend gagal
+  CartModel? _previousCart;
+
   CartProvider({CartRepository? repository})
     : _repository = repository ?? CartRepositoryImpl();
 
@@ -58,20 +61,78 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
+  /// Optimistic: ubah quantity di UI instan, sync backend di background.
+  /// Kalau backend gagal, rollback ke quantity lama tanpa perlu loading.
   Future<void> updateItem(int cartItemId, int quantity) async {
-    await _repository.updateCartItem(cartItemId, quantity);
-    await fetchCart();
+    _previousCart = _cart;
+    if (_cart == null) return;
+
+    final updatedItems = _cart!.items.map((item) {
+      if (item.id != cartItemId) return item;
+      final newSubtotal = item.product.price * quantity;
+      return CartItemModel(
+        id: item.id,
+        productId: item.productId,
+        product: item.product,
+        quantity: quantity,
+        subtotal: newSubtotal,
+      );
+    }).toList();
+
+    _cart = CartModel(
+      items: updatedItems,
+      total: updatedItems.fold<double>(0, (s, i) => s + i.subtotal),
+      itemCount: updatedItems.fold<int>(0, (s, i) => s + i.quantity),
+    );
+    _status = CartStatus.loaded;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repository.updateCartItem(cartItemId, quantity);
+    } catch (e) {
+      _cart = _previousCart;
+      _error = e.toString();
+      notifyListeners();
+    }
   }
 
+  /// Optimistic: hapus item dari UI instan, sync backend di background.
   Future<void> removeItem(int cartItemId) async {
-    await _repository.removeCartItem(cartItemId);
-    await fetchCart();
+    _previousCart = _cart;
+    if (_cart == null) return;
+
+    final updatedItems = _cart!.items.where((i) => i.id != cartItemId).toList();
+    _cart = CartModel(
+      items: updatedItems,
+      total: updatedItems.fold<double>(0, (s, i) => s + i.subtotal),
+      itemCount: updatedItems.fold<int>(0, (s, i) => s + i.quantity),
+    );
+    _status = CartStatus.loaded;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _repository.removeCartItem(cartItemId);
+    } catch (e) {
+      _cart = _previousCart;
+      _error = e.toString();
+      notifyListeners();
+    }
   }
 
   Future<void> clearCart() async {
-    await _repository.clearCart();
+    _previousCart = _cart;
     _cart = const CartModel(items: [], total: 0, itemCount: 0);
     _status = CartStatus.loaded;
     notifyListeners();
+
+    try {
+      await _repository.clearCart();
+    } catch (e) {
+      _cart = _previousCart;
+      _error = e.toString();
+      notifyListeners();
+    }
   }
 }
