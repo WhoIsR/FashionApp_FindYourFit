@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashion_app/core/routes/app_router.dart';
 import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,6 @@ class _CartPageState extends State<CartPage> {
       context.read<CartProvider>().fetchCart();
     });
   }
-
-  String _formatPrice(double value) => 'Rp ${value.toStringAsFixed(0)}';
 
   @override
   Widget build(BuildContext context) {
@@ -83,200 +82,264 @@ class _CartPageState extends State<CartPage> {
                         ),
                         itemBuilder: (context, index) {
                           final item = cartState.items[index];
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 120,
-                                color: colorScheme.surfaceContainer,
-                                child: Image.network(
-                                  item.product.imageUrl,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Icon(
-                                    Icons.broken_image_outlined,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item.product.name.toUpperCase(),
-                                      style: GoogleFonts.notoSerif(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: -0.5,
-                                        color: colorScheme.onSurface,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      item.product.category.toUpperCase(),
-                                      style: GoogleFonts.manrope(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 1.5,
-                                        color: colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      _formatPrice(item.subtotal),
-                                      style: GoogleFonts.manrope(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: colorScheme.secondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () => context
-                                        .read<CartProvider>()
-                                        .removeItem(item.id),
-                                    icon: Icon(
-                                      Icons.close,
-                                      size: 20,
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
-                                    constraints: const BoxConstraints(),
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: colorScheme.outlineVariant,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: item.quantity <= 1
-                                              ? () => context
-                                                    .read<CartProvider>()
-                                                    .removeItem(item.id)
-                                              : () => context
-                                                    .read<CartProvider>()
-                                                    .updateItem(
-                                                      item.id,
-                                                      item.quantity - 1,
-                                                    ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 4,
-                                            ),
-                                            child: Icon(Icons.remove, size: 16),
-                                          ),
-                                        ),
-                                        Text(
-                                          '${item.quantity}',
-                                          style: GoogleFonts.manrope(
-                                            fontWeight: FontWeight.bold,
-                                            color: colorScheme.onSurface,
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () => context
-                                              .read<CartProvider>()
-                                              .updateItem(
-                                                item.id,
-                                                item.quantity + 1,
-                                              ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 4,
-                                            ),
-                                            child: Icon(Icons.add, size: 16),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          return CartItemCard(
+                            key: ValueKey(item.id),
+                            item: item,
+                            colorScheme: colorScheme,
                           );
                         },
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration(
-                        color: colorScheme.surface,
-                        border: Border(
-                          top: BorderSide(
-                            color: colorScheme.surfaceContainerHigh,
-                          ),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'SUBTOTAL',
-                                style: GoogleFonts.manrope(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                              Text(
-                                _formatPrice(cartState.totalPrice),
-                                style: GoogleFonts.notoSerif(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.onSurface,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 56,
-                            child: ElevatedButton(
-                              onPressed: () => Navigator.pushNamed(
-                                context,
-                                AppRouter.checkout,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: colorScheme.onSurface,
-                                foregroundColor: colorScheme.surface,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero,
-                                ),
-                                elevation: 0,
-                              ),
-                              child: Text(
-                                'CHECKOUT',
-                                style: GoogleFonts.manrope(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                    Consumer<CartProvider>(
+                      builder: (context, cart, _) => _CartSubtotal(
+                        totalPrice: cart.totalPrice,
+                        colorScheme: colorScheme,
                       ),
                     ),
                   ],
                 ),
       },
+    );
+  }
+}
+
+/// Individual cart item card — wrapped in [Consumer] so changing one item's
+/// quantity doesn't rebuild every item in the list (and re-download its image).
+class CartItemCard extends StatelessWidget {
+  final dynamic item;
+  final ColorScheme colorScheme;
+
+  const CartItemCard({
+    super.key,
+    required this.item,
+    required this.colorScheme,
+  });
+
+  String _formatPrice(double value) => 'Rp ${value.toStringAsFixed(0)}';
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ▸ Product image — cached so it never flickers on rebuild
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: CachedNetworkImage(
+            imageUrl: item.product.imageUrl,
+            width: 100,
+            height: 120,
+            fit: BoxFit.cover,
+            placeholder: (_, __) => Container(
+              width: 100,
+              height: 120,
+              color: colorScheme.surfaceContainer,
+              child: const Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
+            ),
+            errorWidget: (_, __, ___) => Container(
+              width: 100,
+              height: 120,
+              color: colorScheme.surfaceContainer,
+              child: Icon(
+                Icons.broken_image_outlined,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.product.name.toUpperCase(),
+                style: GoogleFonts.notoSerif(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -0.5,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                item.product.category.toUpperCase(),
+                style: GoogleFonts.manrope(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.5,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // ▸ Subtotal per-item — only this text changes, image stays
+              Consumer<CartProvider>(
+                builder: (context, cart, _) {
+                  final freshItem = cart.items.firstWhere(
+                    (i) => i.id == item.id,
+                    orElse: () => item,
+                  );
+                  return Text(
+                    _formatPrice(freshItem.subtotal),
+                    style: GoogleFonts.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.secondary,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            IconButton(
+              onPressed: () =>
+                  context.read<CartProvider>().removeItem(item.id),
+              icon: Icon(
+                Icons.close,
+                size: 20,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              constraints: const BoxConstraints(),
+              padding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: 24),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: colorScheme.outlineVariant),
+              ),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: item.quantity <= 1
+                        ? () => context
+                            .read<CartProvider>()
+                            .removeItem(item.id)
+                        : () => context
+                            .read<CartProvider>()
+                            .updateItem(item.id, item.quantity - 1),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Icon(Icons.remove, size: 16),
+                    ),
+                  ),
+                  // ▸ Quantity number — Consumer so only this text updates
+                  Consumer<CartProvider>(
+                    builder: (context, cart, _) {
+                      final freshItem = cart.items.firstWhere(
+                        (i) => i.id == item.id,
+                        orElse: () => item,
+                      );
+                      return Text(
+                        '${freshItem.quantity}',
+                        style: GoogleFonts.manrope(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
+                        ),
+                      );
+                    },
+                  ),
+                  InkWell(
+                    onTap: () => context
+                        .read<CartProvider>()
+                        .updateItem(item.id, item.quantity + 1),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Icon(Icons.add, size: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Bottom subtotal bar — only rebuilds when [totalPrice] changes.
+class _CartSubtotal extends StatelessWidget {
+  final double totalPrice;
+  final ColorScheme colorScheme;
+
+  const _CartSubtotal({
+    required this.totalPrice,
+    required this.colorScheme,
+  });
+
+  String _formatPrice(double value) => 'Rp ${value.toStringAsFixed(0)}';
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: colorScheme.surfaceContainerHigh),
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'SUBTOTAL',
+                style: GoogleFonts.manrope(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              Text(
+                _formatPrice(totalPrice),
+                style: GoogleFonts.notoSerif(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: ElevatedButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, AppRouter.checkout),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colorScheme.onSurface,
+                foregroundColor: colorScheme.surface,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                elevation: 0,
+              ),
+              child: Text(
+                'CHECKOUT',
+                style: GoogleFonts.manrope(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -290,7 +353,7 @@ class _EmptyCart extends StatelessWidget {
 
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.shopping_bag_outlined,
