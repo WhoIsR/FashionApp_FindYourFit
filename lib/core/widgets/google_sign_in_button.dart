@@ -17,7 +17,9 @@ class GoogleSignInButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
-          side: BorderSide(color: AppColors.outlineVariant.withOpacity(0.3)),
+          side: BorderSide(
+            color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          ),
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         ),
         child: isLoading

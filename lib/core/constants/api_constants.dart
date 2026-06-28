@@ -1,7 +1,10 @@
 class ApiConstants {
   // Base URL untuk API
   // Jangan pake localhost atau 127.0.0.1 kalau ngetes di HP/Emulator
-  static const String baseUrl = 'http://192.168.18.5:8080/v1';
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://10.0.2.2:8080/v1',
+  );
 
   // Auth endpoints
   static const String verifyToken = '/auth/verify-token';
@@ -9,8 +12,12 @@ class ApiConstants {
   // Product endpoints
   static const String products = '/products';
 
-  // Checkout endpoint
-  static const String checkout = '/checkout';
+  // Cart endpoints
+  static const String cart = '/cart';
+
+  // Order endpoints
+  static const String orders = '/orders';
+  static const String checkout = '/orders/checkout';
 
   // Timeout (Batas waktu nunggu loading, 15 detik)
   static const int connectTimeout = 15000;
