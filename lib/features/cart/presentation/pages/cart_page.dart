@@ -23,10 +23,10 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    // context.select hanya rebuild ketika status berubah (loading→loaded→error).
-    // updateItem/removeItem gak ganti status → body gak direbuild.
+    // context.select only rebuilds this method when status CHANGES.
+    // updateItem/removeItem keep status=loaded → no rebuild here.
     final status = context.select<CartProvider, CartStatus>((p) => p.status);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -47,7 +47,7 @@ class _CartPageState extends State<CartPage> {
         ),
         actions: [
           Consumer<CartProvider>(
-            builder: (context, cart, _) {
+            builder: (ctx, cart, _) {
               if (cart.items.isEmpty) return const SizedBox.shrink();
               return IconButton(
                 onPressed: () => context.read<CartProvider>().clearCart(),
@@ -62,27 +62,35 @@ class _CartPageState extends State<CartPage> {
           child: CircularProgressIndicator(color: colorScheme.secondary),
         ),
         CartStatus.error => _CartErrorWidget(colorScheme: colorScheme),
-        CartStatus.loaded => _CartLoadedContent(colorScheme: colorScheme),
+        CartStatus.loaded => _CartLoadedBody(colorScheme: colorScheme),
       },
     );
   }
 }
 
-/// Once loaded, this widget only rebuilds when item count changes
-/// (add/remove item). Quantity changes DO NOT rebuild this widget
-/// because they don't touch [items.length].
-class _CartLoadedContent extends StatelessWidget {
+/// Renders the loaded cart. This widget's build method is called exactly
+/// ONCE (when status==loaded first appears). It does NOT rebuild on
+/// quantity changes because:
+///   - [context.select] only fires when [items.length] changes
+///   - quantity change doesn't change length
+///   - [items] list reference changes but [length] stays same → select skip
+///
+/// Since [items] is captured at initial build, each [CartItemCard] gets
+/// its product data as baked-in [final] props. Only the [Consumer] wrappers
+/// inside each card re-run when provider notifies.
+class _CartLoadedBody extends StatelessWidget {
   final ColorScheme colorScheme;
-
-  const _CartLoadedContent({required this.colorScheme});
+  const _CartLoadedBody({required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {
     final itemCount = context.select<CartProvider, int>((p) => p.items.length);
-
     if (itemCount == 0) return const _EmptyCart();
 
+    // Snapshot the item list ONCE at build. Since this build only
+    // runs when length changes (add/remove), the snapshots stay valid.
     final items = context.read<CartProvider>().items;
+
     return Column(
       children: [
         Expanded(
@@ -95,6 +103,8 @@ class _CartLoadedContent extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final item = items[index];
+              // Product info baked in as final props — never changes.
+              // Quantity is managed by local ValueNotifier inside CartItemCard.
               return CartItemCard(
                 key: ValueKey(item.id),
                 itemId: item.id,
@@ -117,11 +127,17 @@ class _CartLoadedContent extends StatelessWidget {
   }
 }
 
-/// Individual cart item card — StatefulWidget + RepaintBoundary.
-/// 
-/// Only the [Consumer<CartProvider>] wrappers around subtotal & quantity
-/// fire on quantity changes. The image, name, category, and layout remain
-/// untouched after initial build.
+/// Individual cart item.
+///
+/// ⭐ KEY INSIGHT: quantity is managed by a LOCAL [ValueNotifier<int>].
+/// Pressing +/- updates the notifier → only the quantity [Text] rebuilds
+/// (via [ValueListenableBuilder]). The provider is called fire-and-forget
+/// for backend sync. Subtotal uses [Consumer] to read the provider's value
+/// (which matches after sync).
+///
+/// Result: pressing +/- causes ZERO provider-tree rebuilds for the
+/// quantity digit itself — no Consumer, no CartItemCard.build re-run,
+/// no image blink, no flicker.
 class CartItemCard extends StatefulWidget {
   final int itemId;
   final String productName;
@@ -143,7 +159,64 @@ class CartItemCard extends StatefulWidget {
 }
 
 class _CartItemCardState extends State<CartItemCard> {
-  String _formatPrice(double value) => 'Rp ${value.toStringAsFixed(0)}';
+  late final ValueNotifier<int> _qtyNotifier;
+  int _qtySnapshot = 1; // used at init time
+
+  String _fmt(double v) => 'Rp ${v.toStringAsFixed(0)}';
+
+  @override
+  void initState() {
+    super.initState();
+    // Read initial quantity from provider
+    _qtySnapshot = context.read<CartProvider>().items
+        .firstWhere((i) => i.id == widget.itemId,
+            orElse: () => context.read<CartProvider>().items.first)
+        .quantity;
+    _qtyNotifier = ValueNotifier<int>(_qtySnapshot);
+  }
+
+  @override
+  void dispose() {
+    _qtyNotifier.dispose();
+    super.dispose();
+  }
+
+  void _decrement() {
+    if (_qtyNotifier.value <= 1) {
+      context.read<CartProvider>().removeItem(widget.itemId);
+      return;
+    }
+    final newQty = _qtyNotifier.value - 1;
+    _qtyNotifier.value = newQty;
+    // Capture provider before async gap
+    final provider = context.read<CartProvider>();
+    provider.updateItem(widget.itemId, newQty).then((_) {
+      if (!mounted) return;
+      final actual = provider.items
+          .firstWhere((i) => i.id == widget.itemId,
+              orElse: () => provider.items.first)
+          .quantity;
+      if (actual != _qtyNotifier.value) {
+        _qtyNotifier.value = actual;
+      }
+    });
+  }
+
+  void _increment() {
+    final newQty = _qtyNotifier.value + 1;
+    _qtyNotifier.value = newQty;
+    final provider = context.read<CartProvider>();
+    provider.updateItem(widget.itemId, newQty).then((_) {
+      if (!mounted) return;
+      final actual = provider.items
+          .firstWhere((i) => i.id == widget.itemId,
+              orElse: () => provider.items.first)
+          .quantity;
+      if (actual != _qtyNotifier.value) {
+        _qtyNotifier.value = actual;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +226,7 @@ class _CartItemCardState extends State<CartItemCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ▸ Image — cached, no fade animation
+          // ▸ Image — cached, zero fade
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: CachedNetworkImage(
@@ -202,7 +275,7 @@ class _CartItemCardState extends State<CartItemCard> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // ▸ Subtotal — Consumer, only this text rebuilds
+                // ▸ Subtotal — Consumer<CartProvider>, only this text rebuilds
                 Consumer<CartProvider>(
                   builder: (context, cart, _) {
                     final freshItem = cart.items.firstWhere(
@@ -210,7 +283,7 @@ class _CartItemCardState extends State<CartItemCard> {
                       orElse: () => cart.items.first,
                     );
                     return Text(
-                      _formatPrice(freshItem.subtotal),
+                      _fmt(freshItem.subtotal),
                       style: GoogleFonts.manrope(
                         fontSize: 14, fontWeight: FontWeight.w600,
                         color: cs.secondary,
@@ -237,42 +310,25 @@ class _CartItemCardState extends State<CartItemCard> {
                 child: Row(
                   children: [
                     InkWell(
-                      onTap: () {
-                        // read quantity from current state via context.read
-                        final qty = context.read<CartProvider>().items
-                            .firstWhere((i) => i.id == widget.itemId, orElse: () => context.read<CartProvider>().items.first).quantity;
-                        if (qty <= 1) {
-                          context.read<CartProvider>().removeItem(widget.itemId);
-                        } else {
-                          context.read<CartProvider>().updateItem(widget.itemId, qty - 1);
-                        }
-                      },
+                      onTap: _decrement,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         child: Icon(Icons.remove, size: 16),
                       ),
                     ),
-                    // ▸ Quantity — Consumer, only this text rebuilds
-                    Consumer<CartProvider>(
-                      builder: (context, cart, _) {
-                        final freshItem = cart.items.firstWhere(
-                          (i) => i.id == widget.itemId,
-                          orElse: () => cart.items.first,
-                        );
-                        return Text(
-                          '${freshItem.quantity}',
-                          style: GoogleFonts.manrope(
-                            fontWeight: FontWeight.bold, color: cs.onSurface,
-                          ),
-                        );
-                      },
+                    // ▸ Quantity — ValueListenableBuilder, ZERO provider rebuilds
+                    ValueListenableBuilder<int>(
+                      valueListenable: _qtyNotifier,
+                      builder: (context, qty, _) => Text(
+                        '$qty',
+                        style: GoogleFonts.manrope(
+                          fontWeight: FontWeight.bold,
+                          color: cs.onSurface,
+                        ),
+                      ),
                     ),
                     InkWell(
-                      onTap: () {
-                        final qty = context.read<CartProvider>().items
-                            .firstWhere((i) => i.id == widget.itemId, orElse: () => context.read<CartProvider>().items.first).quantity;
-                        context.read<CartProvider>().updateItem(widget.itemId, qty + 1);
-                      },
+                      onTap: _increment,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         child: Icon(Icons.add, size: 16),
@@ -311,10 +367,12 @@ class _CartSubtotal extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('SUBTOTAL', style: GoogleFonts.manrope(
-                fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 2.0, color: colorScheme.onSurfaceVariant,
+                fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 2.0,
+                color: colorScheme.onSurfaceVariant,
               )),
               Text(_formatPrice(totalPrice), style: GoogleFonts.notoSerif(
-                fontSize: 16, fontWeight: FontWeight.bold, color: colorScheme.onSurface,
+                fontSize: 16, fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
               )),
             ],
           ),
