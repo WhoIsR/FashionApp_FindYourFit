@@ -3,9 +3,13 @@
 Proyek Ujian Akhir Semester mata kuliah Aplikasi Mobile Lanjutan. Repository ini
 berisi aplikasi Flutter **FindYourFit** sebagai E-Commerce atau merchant.
 
-Pembayaran Dompet Kampus Global dibuat sebagai aplikasi wallet terpisah pada
-repository berbeda. FindYourFit tetap terhubung ke wallet tersebut melalui
-integrasi App-to-App menggunakan Deep Link.
+Aplikasi ini **terintegrasi dengan EMoney** sebagai sistem pembayaran digital
+(App-to-App via Deep Link). Repository EMoney terpisah:
+
+➡️ [github.com/WhoIsR/EMoney-MobileApp.git](https://github.com/WhoIsR/EMoney-MobileApp.git)
+
+FindYourFit tetap terhubung ke wallet tersebut melalui integrasi App-to-App
+menggunakan Deep Link.
 
 ## Fitur Aplikasi
 
