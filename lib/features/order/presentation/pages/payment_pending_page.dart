@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fashion_app/core/routes/app_router.dart';
 import 'package:fashion_app/core/services/global_institute_pay_service.dart';
+import 'package:fashion_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:fashion_app/features/order/data/models/order_model.dart';
 import 'package:fashion_app/features/order/presentation/providers/order_provider.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,8 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
     final provider = context.read<OrderProvider>();
     if (provider.payStatus == PaymentCheckStatus.paid) {
       _statusTimer?.cancel();
+      await context.read<CartProvider>().fetchCart();
+      if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(
         context,
         AppRouter.orderSuccess,

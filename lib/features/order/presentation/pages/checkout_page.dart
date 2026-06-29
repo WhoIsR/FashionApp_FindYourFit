@@ -48,7 +48,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       return;
     }
 
-    await cartProv.fetchCart();
+    if (_paymentMethod != GlobalInstitutePayService.paymentMethod) {
+      await cartProv.fetchCart();
+    }
     if (!mounted) return;
 
     Navigator.pushNamedAndRemoveUntil(
