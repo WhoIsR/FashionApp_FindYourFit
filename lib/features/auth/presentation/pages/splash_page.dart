@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/routes/app_router.dart';
-import '../../../../core/services/secure_storage.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../providers/auth_provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -22,10 +23,10 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 4));
     if (!mounted) return;
 
-    final token = await SecureStorage.getToken();
+    final restored = await context.read<AuthProvider>().restoreSession();
     if (!mounted) return;
 
-    final nextRoute = token != null ? AppRouter.dashboard : AppRouter.login;
+    final nextRoute = restored ? AppRouter.dashboard : AppRouter.login;
     Navigator.pushReplacementNamed(context, nextRoute);
   }
 

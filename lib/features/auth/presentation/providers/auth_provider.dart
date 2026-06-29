@@ -35,6 +35,16 @@ class AuthProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   bool get isLoading => _status == AuthStatus.loading;
 
+  Future<bool> restoreSession() async {
+    _firebaseUser = _auth.currentUser;
+    final token = await SecureStorage.getToken();
+    _status = token == null
+        ? AuthStatus.unauthenticated
+        : AuthStatus.authenticated;
+    notifyListeners();
+    return token != null;
+  }
+
   // 1. REGISTER
   Future<bool> register({
     required String name,
