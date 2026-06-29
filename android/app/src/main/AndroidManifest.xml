@@ -55,7 +55,7 @@
         </intent>
         <intent>
             <action android:name="android.intent.action.VIEW"/>
-            <data android:scheme="dompetkampus"/>
+            <data android:scheme="kashi"/>
         </intent>
     </queries>
 </manifest>

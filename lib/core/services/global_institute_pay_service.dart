@@ -97,7 +97,7 @@ class GlobalInstitutePayService {
 
   static Uri buildPaymentUri({required int orderId, required double amount}) {
     return Uri(
-      scheme: 'dompetkampus',
+      scheme: 'kashi',
       host: 'pay',
       queryParameters: {
         'merchant_id': merchantId,

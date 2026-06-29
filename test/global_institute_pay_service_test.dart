@@ -13,7 +13,7 @@ void main() {
         amount: 150000,
       );
 
-      expect(uri.scheme, 'dompetkampus');
+      expect(uri.scheme, 'kashi');
       expect(uri.host, 'pay');
       expect(uri.queryParameters['merchant_id'], 'MCH_FINDYOURFIT');
       expect(uri.queryParameters['merchant_name'], 'FindYourFit');
