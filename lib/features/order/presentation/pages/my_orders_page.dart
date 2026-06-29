@@ -30,7 +30,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
   String _paymentLabel(String method) {
     return switch (method) {
-      'global_institute_pay' => 'Dompet Kampus',
+      'global_institute_pay' => 'Kashi E money',
       'bank_transfer' => 'Virtual Account',
       'gopay' => 'GoPay',
       _ => method.isEmpty ? '-' : method,

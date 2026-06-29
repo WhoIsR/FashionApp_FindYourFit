@@ -135,7 +135,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             _PaymentOption(
               value: GlobalInstitutePayService.paymentMethod,
               groupValue: _paymentMethod,
-              title: 'Dompet Kampus Global',
+              title: 'Kashi E money',
               icon: Icons.account_balance_wallet_outlined,
               onChanged: (value) => setState(() => _paymentMethod = value),
             ),
