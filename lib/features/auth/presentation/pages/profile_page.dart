@@ -20,10 +20,7 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: colorScheme.surface.withValues(alpha: 0.9),
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onSurface),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'PROFILE',
           style: GoogleFonts.notoSerif(
