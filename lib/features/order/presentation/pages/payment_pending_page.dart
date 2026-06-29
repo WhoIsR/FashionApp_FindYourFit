@@ -91,14 +91,14 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
       if (!mounted) return;
       if (!opened) {
         setState(() {
-          _walletMessage = 'Aplikasi Dompet Kampus tidak dapat dibuka.';
+          _walletMessage = 'Aplikasi Kashi E money tidak dapat dibuka.';
         });
       }
     } catch (_) {
       if (!mounted) return;
       setState(() {
         _walletMessage =
-            'Dompet Kampus belum terpasang atau tidak dapat dibuka.';
+            'Kashi E money belum terpasang atau tidak dapat dibuka.';
       });
     } finally {
       if (mounted) {
@@ -123,7 +123,7 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
         });
       case PaymentCallbackStatus.cancelled:
         setState(() {
-          _walletMessage = 'Pembayaran dibatalkan di Dompet Kampus.';
+          _walletMessage = 'Pembayaran dibatalkan di Kashi E money.';
         });
     }
   }
@@ -155,7 +155,7 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
           const SizedBox(height: 20),
           Text(
             isGlobalInstitutePay
-                ? 'Bayar melalui Dompet Kampus'
+                ? 'Bayar melalui Kashi E money'
                 : isGopay
                 ? 'Selesaikan Pembayaran via GoPay'
                 : 'Selesaikan Pembayaran via Virtual Account',
@@ -180,7 +180,7 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
             const _InfoBox(
               title: 'Pembayaran App-to-App',
               value:
-                  'Konfirmasi detail transaksi, masukkan PIN, lalu selesaikan verifikasi 2FA di Dompet Kampus.',
+                  'Konfirmasi detail transaksi, masukkan PIN, lalu selesaikan verifikasi 2FA di Kashi E money.',
             )
           else if (!isGopay)
             _InfoBox(
@@ -206,8 +206,8 @@ class _PaymentPendingPageState extends State<PaymentPendingPage> {
                   : const Icon(Icons.open_in_new),
               label: Text(
                 _openingWallet
-                    ? 'Membuka Dompet Kampus...'
-                    : 'Buka Dompet Kampus',
+                    ? 'Membuka Kashi E money...'
+                    : 'Buka Kashi E money',
               ),
             ),
             if (_walletMessage != null) ...[
