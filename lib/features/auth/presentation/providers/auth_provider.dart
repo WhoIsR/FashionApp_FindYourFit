@@ -56,8 +56,21 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
 
+    try {
+      final firebaseToken = await _firebaseUser?.getIdToken();
+      if (firebaseToken != null) {
+        final backendToken = await _repository.verifyFirebaseTokenToBackend(
+          firebaseToken,
+        );
+        await SecureStorage.saveToken(backendToken);
+      }
+    } catch (e) {
+      _errorMessage = e.toString();
+    }
+
+    _status = AuthStatus.authenticated;
     notifyListeners();
-    return _verifyTokenToBackend();
+    return true;
   }
 
   // 1. REGISTER
