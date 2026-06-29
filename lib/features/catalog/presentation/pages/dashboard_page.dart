@@ -629,12 +629,15 @@ class _DashboardPageState extends State<DashboardPage> {
         : colorScheme.onSurface.withValues(alpha: 0.6);
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: isActive ? 28 : 24),
-          const SizedBox(height: 4),
-          Text(
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: isActive ? 28 : 24),
+            const SizedBox(height: 4),
+            Text(
             label.toUpperCase(),
             style: GoogleFonts.manrope(
               color: color,
@@ -644,6 +647,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
