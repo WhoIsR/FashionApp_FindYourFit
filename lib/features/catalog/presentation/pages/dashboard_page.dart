@@ -160,7 +160,7 @@ class _DashboardPageState extends State<DashboardPage> {
               onPopInvokedWithResult: (didPop, _) {
                 if (!didPop) setState(() => _currentNavIndex = 0);
               },
-              child: const CartPage(),
+              child: const CartPage(embeddedInTab: true),
             ),
           ),
 

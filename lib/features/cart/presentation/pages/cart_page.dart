@@ -6,7 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  final bool embeddedInTab;
+  const CartPage({super.key, this.embeddedInTab = false});
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -34,12 +35,9 @@ class _CartPageState extends State<CartPage> {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        automaticallyImplyLeading: false,
-        leading: Navigator.of(context).canPop()
-            ? IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: colorScheme.onSurface, size: 20),
-                onPressed: () => Navigator.pop(context),
-              )
+        automaticallyImplyLeading: !widget.embeddedInTab,
+        leading: widget.embeddedInTab
+            ? const SizedBox.shrink()
             : null,
         title: Text(
           'SHOPPING BAG',
