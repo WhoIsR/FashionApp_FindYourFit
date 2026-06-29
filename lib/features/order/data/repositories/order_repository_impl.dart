@@ -6,6 +6,28 @@ import '../../domain/repositories/order_repository.dart';
 import '../models/order_model.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
+  Map<String, dynamic> _dataMap(dynamic responseData) {
+    final body = responseData is Map
+        ? Map<String, dynamic>.from(responseData)
+        : <String, dynamic>{};
+    final data = body['data'];
+    return data is Map ? Map<String, dynamic>.from(data) : body;
+  }
+
+  List<dynamic> _dataList(dynamic responseData) {
+    final body = responseData is Map
+        ? Map<String, dynamic>.from(responseData)
+        : <String, dynamic>{};
+    final data = body['data'];
+    if (data is List<dynamic>) return data;
+    if (data is Map<String, dynamic>) {
+      final orders = data['orders'];
+      if (orders is List<dynamic>) return orders;
+    }
+    final orders = body['orders'];
+    return orders is List<dynamic> ? orders : [];
+  }
+
   @override
   Future<OrderModel> checkout({
     required String shippingAddress,
@@ -21,8 +43,7 @@ class OrderRepositoryImpl implements OrderRepository {
           'payment_method': paymentMethod,
         },
       );
-      final data = response.data['data'] as Map<String, dynamic>? ?? {};
-      return OrderModel.fromJson(data);
+      return OrderModel.fromJson(_dataMap(response.data));
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Checkout gagal';
     }
@@ -35,8 +56,7 @@ class OrderRepositoryImpl implements OrderRepository {
         ApiConstants.orders,
         queryParameters: {'page': page, 'limit': limit},
       );
-      final data = response.data['data'] as List<dynamic>? ?? [];
-      return data
+      return _dataList(response.data)
           .map((e) => OrderModel.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
@@ -50,8 +70,7 @@ class OrderRepositoryImpl implements OrderRepository {
       final response = await DioClient.instance.get(
         '${ApiConstants.orders}/$orderId',
       );
-      final data = response.data['data'] as Map<String, dynamic>? ?? {};
-      return OrderModel.fromJson(data);
+      return OrderModel.fromJson(_dataMap(response.data));
     } on DioException catch (e) {
       throw e.response?.data['message'] ?? 'Gagal mengambil detail order';
     }
