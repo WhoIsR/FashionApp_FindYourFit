@@ -102,7 +102,10 @@ class _DashboardPageState extends State<DashboardPage> {
                               color: colorScheme.onSurface,
                             ),
                             onPressed: () {
-                              setState(() => _currentNavIndex = 2);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const CartPage()),
+                              );
                             },
                           ),
                           Positioned(
