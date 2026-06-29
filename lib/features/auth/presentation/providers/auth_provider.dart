@@ -38,11 +38,26 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> restoreSession() async {
     _firebaseUser = _auth.currentUser;
     final token = await SecureStorage.getToken();
-    _status = token == null
-        ? AuthStatus.unauthenticated
-        : AuthStatus.authenticated;
+    if (token != null) {
+      _status = AuthStatus.authenticated;
+      notifyListeners();
+      return true;
+    }
+
+    if (_firebaseUser == null) {
+      _status = AuthStatus.unauthenticated;
+      notifyListeners();
+      return false;
+    }
+
+    if (!(_firebaseUser?.emailVerified ?? false)) {
+      _status = AuthStatus.emailNotVerified;
+      notifyListeners();
+      return false;
+    }
+
     notifyListeners();
-    return token != null;
+    return _verifyTokenToBackend();
   }
 
   // 1. REGISTER
