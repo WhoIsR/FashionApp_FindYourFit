@@ -21,7 +21,8 @@ class ProfilePage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: const SizedBox.shrink(),
+        leadingWidth: 0,
+        leading: null,
         title: Text(
           'PROFILE',
           style: GoogleFonts.notoSerif(

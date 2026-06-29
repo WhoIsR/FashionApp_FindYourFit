@@ -35,10 +35,12 @@ class _CartPageState extends State<CartPage> {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
-        automaticallyImplyLeading: !widget.embeddedInTab,
-        leading: widget.embeddedInTab
-            ? const SizedBox.shrink()
-            : null,
+        automaticallyImplyLeading: false,
+        leadingWidth: widget.embeddedInTab ? 0 : null,
+        leading: widget.embeddedInTab ? null : IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: colorScheme.onSurface, size: 20),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
           'SHOPPING BAG',
           style: GoogleFonts.manrope(
