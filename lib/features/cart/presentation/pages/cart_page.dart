@@ -34,6 +34,7 @@ class _CartPageState extends State<CartPage> {
         backgroundColor: colorScheme.surface,
         elevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         leading: Navigator.of(context).canPop()
             ? IconButton(
                 icon: Icon(Icons.arrow_back_ios_new, color: colorScheme.onSurface, size: 20),
